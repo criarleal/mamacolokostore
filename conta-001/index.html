@@ -227,13 +227,24 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            touch-action: none; /* Necessário para touch/zoom mobile não bugar a tela */
         }
         .lightbox-img-wrap img {
             width: 100%;
             max-height: 78vh;
             object-fit: contain;
             display: block;
+            will-change: transform;
+            transition: transform 0.15s ease-out; /* Suavidade no Zoom */
+            cursor: grab;
         }
+        .lightbox-img-wrap.no-transition img {
+            transition: none; /* Desativa a transição na hora de arrastar para ficar responsivo */
+        }
+        .lightbox-img-wrap img:active {
+            cursor: grabbing;
+        }
+        
         .lightbox-close {
             position: fixed;
             top: 20px;
@@ -250,6 +261,7 @@
             align-items: center;
             justify-content: center;
             transition: background 0.2s;
+            z-index: 1000;
         }
         .lightbox-close:hover { background: rgba(255,255,255,0.2); }
         .lightbox-nav {
@@ -270,6 +282,7 @@
             justify-content: center;
             font-size: 1rem;
             transition: background 0.2s, border-color 0.2s;
+            z-index: 10;
         }
         .lb-btn:hover { background: rgba(230,92,0,0.3); border-color: var(--orange); }
         .lb-counter {
@@ -466,20 +479,6 @@
             box-shadow: 0 12px 50px rgba(230,92,0,0.3);
         }
         .footer-banner img { width: 100%; display: block; }
-
-        /* ── EDIT HINT ── */
-        .edit-hint {
-            background: rgba(255,215,0,0.05);
-            border: 1px dashed rgba(255,215,0,0.2);
-            border-radius: 8px;
-            padding: 10px 14px;
-            margin-bottom: 20px;
-            font-size: 0.72rem;
-            color: #887744;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
     </style>
 </head>
 <body>
@@ -511,9 +510,7 @@
 
     <!-- GALLERY COLUMN -->
     <div>
-        <!-- Substitua as URLs abaixo pelas imagens da conta -->
-        <div class="gallery-grid" id="galleryGrid">
-        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
     </div>
 
     <!-- DESCRIPTION COLUMN -->
@@ -632,7 +629,7 @@
     <button class="lb-btn lightbox-arrow-right" id="lbNext"><i class="fas fa-chevron-right"></i></button>
 
     <div class="lightbox-inner">
-        <div class="lightbox-img-wrap">
+        <div class="lightbox-img-wrap" id="lbWrap">
             <img id="lbImg" src="" alt="Print da conta">
         </div>
         <div class="lightbox-nav">
@@ -644,43 +641,30 @@
 </div>
 
 <script>
-    /* ==============================================
-       CONFIGURAÇÃO DAS IMAGENS
-       Adicione ou remova URLs no array abaixo.
-       A ordem das imagens segue a ordem do array.
-    ============================================== */
     const images = [
-        {
-            url: "https://criarleal.github.io/mamacolokostore/conta-001/1.png"
-        },
-        {
-            url: "https://criarleal.github.io/mamacolokostore/conta-001/2.png"
-        },
-        {
-            url: "https://criarleal.github.io/mamacolokostore/conta-001/3.png"
-        },
-        {
-            url: "https://criarleal.github.io/mamacolokostore/conta-001/4.png"
-        },
-        {
-            url: "https://criarleal.github.io/mamacolokostore/conta-001/5.png"
-        },
-        {
-            url: "https://criarleal.github.io/mamacolokostore/conta-001/6.png"
-        },
-        {
-            url: "https://criarleal.github.io/mamacolokostore/conta-001/7.png"
-        }
+        { url: "https://criarleal.github.io/mamacolokostore/conta-001/1.png" },
+        { url: "https://criarleal.github.io/mamacolokostore/conta-001/2.png" },
+        { url: "https://criarleal.github.io/mamacolokostore/conta-001/3.png" },
+        { url: "https://criarleal.github.io/mamacolokostore/conta-001/4.png" },
+        { url: "https://criarleal.github.io/mamacolokostore/conta-001/5.png" },
+        { url: "https://criarleal.github.io/mamacolokostore/conta-001/6.png" },
+        { url: "https://criarleal.github.io/mamacolokostore/conta-001/7.png" }
     ];
-    /* ==============================================
-       FIM DA CONFIGURAÇÃO
-    ============================================== */
 
     let current = 0;
     const grid    = document.getElementById('galleryGrid');
     const lb      = document.getElementById('lightbox');
     const lbImg   = document.getElementById('lbImg');
+    const lbWrap  = document.getElementById('lbWrap');
     const lbCount = document.getElementById('lbCounter');
+
+    // Variáveis do Zoom e Pan (Arrastar)
+    let scale = 1;
+    let isDragging = false;
+    let startX, startY;
+    let translateX = 0, translateY = 0;
+    let initialDistance = null;
+    let initialScale = 1;
 
     function buildGrid() {
         grid.innerHTML = '';
@@ -688,7 +672,7 @@
             const div = document.createElement('div');
             div.className = 'thumb';
             div.innerHTML = `
-                <img src="${img.url}" alt="${img.caption}" loading="lazy">
+                <img src="${img.url}" loading="lazy">
                 <div class="thumb-overlay"><i class="fas fa-expand"></i></div>
                 <div class="thumb-num">${i + 1} / ${images.length}</div>
             `;
@@ -699,6 +683,7 @@
 
     function openLightbox(i) {
         current = i;
+        resetZoom();
         updateLb();
         lb.classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -707,24 +692,124 @@
     function closeLightbox() {
         lb.classList.remove('active');
         document.body.style.overflow = '';
+        resetZoom();
     }
 
     function updateLb() {
         lbImg.src = images[current].url;
-        lbImg.alt = images[current].caption;
         lbCount.textContent = `${current + 1} / ${images.length}`;
     }
 
-    function prevImg() { current = (current - 1 + images.length) % images.length; updateLb(); }
-    function nextImg() { current = (current + 1) % images.length; updateLb(); }
+    function prevImg() { 
+        current = (current - 1 + images.length) % images.length; 
+        resetZoom();
+        updateLb(); 
+    }
+    
+    function nextImg() { 
+        current = (current + 1) % images.length; 
+        resetZoom();
+        updateLb(); 
+    }
 
+    // --- SISTEMA DE ZOOM E PAN (ARRASTAR) ---
+    function resetZoom() {
+        scale = 1;
+        translateX = 0;
+        translateY = 0;
+        applyTransform();
+    }
+
+    function applyTransform() {
+        lbImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+
+    // 1. Zoom com Scroll do Mouse
+    lbWrap.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const zoomSensitivity = 0.15;
+        const delta = Math.sign(e.deltaY) * -1;
+        
+        let newScale = scale + (delta * zoomSensitivity * scale);
+        
+        if (newScale < 1) newScale = 1;
+        if (newScale > 5) newScale = 5; // Zoom máximo de 5x
+
+        if (newScale === 1) {
+            translateX = 0;
+            translateY = 0;
+        }
+
+        scale = newScale;
+        applyTransform();
+    }, { passive: false });
+
+    // 2. Arrastar a Imagem (Mouse / Touch)
+    lbWrap.addEventListener('pointerdown', (e) => {
+        if (scale > 1) {
+            isDragging = true;
+            lbWrap.classList.add('no-transition'); // Remove delay pra arrastar liso
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+        }
+    });
+
+    window.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+        applyTransform();
+    });
+
+    window.addEventListener('pointerup', () => {
+        isDragging = false;
+        lbWrap.classList.remove('no-transition');
+    });
+
+    // 3. Pinch-to-Zoom (Movimento de pinça no Celular)
+    lbWrap.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            isDragging = false;
+            initialDistance = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            initialScale = scale;
+        }
+    }, { passive: false });
+
+    lbWrap.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            const currentDistance = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            
+            const zoomFactor = currentDistance / initialDistance;
+            scale = initialScale * zoomFactor;
+            
+            if (scale < 1) scale = 1;
+            if (scale > 5) scale = 5;
+            
+            if (scale === 1) { translateX = 0; translateY = 0; }
+            
+            applyTransform();
+        }
+    }, { passive: false });
+
+    // Botões
     document.getElementById('lbClose').addEventListener('click', closeLightbox);
     document.getElementById('lbPrev').addEventListener('click', prevImg);
     document.getElementById('lbNext').addEventListener('click', nextImg);
     document.getElementById('lbPrev2').addEventListener('click', prevImg);
     document.getElementById('lbNext2').addEventListener('click', nextImg);
 
-    lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+    lb.addEventListener('click', e => { 
+        if (e.target === lb) closeLightbox(); 
+    });
 
     document.addEventListener('keydown', e => {
         if (!lb.classList.contains('active')) return;
@@ -733,10 +818,16 @@
         if (e.key === 'ArrowRight') nextImg();
     });
 
-    // Touch swipe
+    // Swipe original adaptado para não bugar com o zoom
     let touchStartX = 0;
-    lb.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; });
+    lb.addEventListener('touchstart', e => { 
+        if (e.touches.length === 1) {
+            touchStartX = e.changedTouches[0].clientX; 
+        }
+    });
+    
     lb.addEventListener('touchend', e => {
+        if (scale > 1 || e.changedTouches.length !== 1) return; // Bloqueia swipe se estiver com zoom
         const diff = touchStartX - e.changedTouches[0].clientX;
         if (Math.abs(diff) > 50) diff > 0 ? nextImg() : prevImg();
     });
