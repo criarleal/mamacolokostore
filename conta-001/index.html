@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mamako Loko Shop | Galeria de Conta</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --gold: #FFD700;
+            --orange: #E65C00;
+            --dark: #070708;
+            --card: #0F0F12;
+            --border: #1e1e24;
+        }
+
+        body {
+            background: var(--dark);
+            color: #e5e5e5;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+
+        /* ── NAV ── */
+        nav {
+            background: rgba(7,7,8,0.97);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .nav-logo img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .nav-brand {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 1.1rem;
+            letter-spacing: 0.08em;
+            background: linear-gradient(90deg, #FFD700, #E65C00, #dc2626);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-sub { font-size: 9px; color: #666; letter-spacing: 0.2em; text-transform: uppercase; margin-top: -2px; }
+
+        .nav-back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #aaa;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 999px;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .nav-back:hover { color: var(--gold); border-color: #E65C0050; }
+
+        /* ── PAGE HEADER ── */
+        .page-header {
+            background: linear-gradient(180deg, #0f0f12 0%, #070708 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 48px 24px 40px;
+            text-align: center;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(230,92,0,0.12);
+            border: 1px solid rgba(230,92,0,0.35);
+            color: var(--gold);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: 999px;
+            margin-bottom: 16px;
+        }
+        .page-title {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: clamp(1.5rem, 4vw, 2.6rem);
+            color: #fff;
+            line-height: 1.15;
+            letter-spacing: 0.04em;
+        }
+        .page-title span {
+            background: linear-gradient(90deg, #FFD700, #E65C00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .page-code {
+            margin-top: 10px;
+            font-size: 0.75rem;
+            color: #555;
+            font-family: monospace;
+            letter-spacing: 0.1em;
+        }
+
+        /* ── LAYOUT ── */
+        .main-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 48px 20px 80px;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 40px;
+            align-items: start;
+        }
+        @media (max-width: 960px) {
+            .main-content { grid-template-columns: 1fr; }
+        }
+
+        /* ── GALLERY ── */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        @media (max-width: 600px) {
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .thumb {
+            aspect-ratio: 16/10;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            background: #111;
+        }
+        .thumb:hover {
+            border-color: var(--orange);
+            transform: scale(1.03);
+            box-shadow: 0 0 20px rgba(230,92,0,0.3);
+        }
+        .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s;
+        }
+        .thumb:hover img { transform: scale(1.07); }
+        .thumb-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .thumb:hover .thumb-overlay { opacity: 1; }
+        .thumb-overlay i { font-size: 1.4rem; color: #fff; }
+
+        .thumb-num {
+            position: absolute;
+            bottom: 6px;
+            right: 8px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #fff;
+            background: rgba(0,0,0,0.7);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: monospace;
+        }
+
+        /* ── LIGHTBOX ── */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(6px);
+        }
+        .lightbox.active { display: flex; }
+        .lightbox-inner {
+            position: relative;
+            max-width: 1100px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+        .lightbox-img-wrap {
+            position: relative;
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: #000;
+            max-height: 78vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .lightbox-img-wrap img {
+            width: 100%;
+            max-height: 78vh;
+            object-fit: contain;
+            display: block;
+        }
+        .lightbox-close {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .lightbox-close:hover { background: rgba(255,255,255,0.2); }
+        .lightbox-nav {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .lb-btn {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .lb-btn:hover { background: rgba(230,92,0,0.3); border-color: var(--orange); }
+        .lb-counter {
+            font-size: 0.78rem;
+            color: #888;
+            font-family: monospace;
+            min-width: 60px;
+            text-align: center;
+        }
+        .lightbox-arrow-left {
+            position: fixed;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .lightbox-arrow-right {
+            position: fixed;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* ── DESCRIPTION CARD ── */
+        .desc-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            position: sticky;
+            top: 92px;
+        }
+        .desc-header {
+            background: linear-gradient(135deg, #0e0e11 0%, #1a0f04 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 22px;
+        }
+        .desc-label {
+            font-size: 9px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #555;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .desc-title {
+            font-family: 'Cinzel', serif;
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: var(--gold);
+            line-height: 1.3;
+            letter-spacing: 0.04em;
+        }
+        .desc-body {
+            padding: 20px 22px;
+            max-height: 520px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+        }
+        .desc-body::-webkit-scrollbar { width: 4px; }
+        .desc-body::-webkit-scrollbar-track { background: transparent; }
+        .desc-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+        .desc-section { margin-bottom: 18px; }
+        .desc-section-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--orange);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .desc-section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+        .desc-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .desc-list li {
+            font-size: 0.8rem;
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 3px 0;
+        }
+        .desc-list li::before {
+            content: '•';
+            color: var(--gold);
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .desc-list li strong {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .desc-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .info-pill {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 10px;
+            text-align: center;
+        }
+        .info-pill .label { font-size: 8px; color: #555; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; }
+        .info-pill .value { font-size: 0.8rem; color: #22c55e; font-weight: 700; margin-top: 2px; }
+        .info-pill .value.gold { color: var(--gold); }
+
+        .price-block {
+            background: rgba(230,92,0,0.07);
+            border: 1px solid rgba(230,92,0,0.25);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .price-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.15em; color: #777; font-weight: 700; }
+        .price-value {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #fff;
+        }
+        .price-badge {
+            background: #22c55e20;
+            border: 1px solid #22c55e40;
+            color: #22c55e;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .cta-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #16a34a, #0d9488);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 14px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(22,163,74,0.25);
+        }
+        .cta-btn:hover { transform: scale(1.03); box-shadow: 0 6px 30px rgba(22,163,74,0.4); }
+        .cta-btn i { font-size: 1.1rem; }
+
+        .seller-note {
+            margin-top: 12px;
+            font-size: 0.7rem;
+            color: #555;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* ── FOOTER BANNER ── */
+        .footer-banner {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+            text-align: center;
+        }
+        .footer-banner a {
+            display: block;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(230,92,0,0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .footer-banner a:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 50px rgba(230,92,0,0.3);
+        }
+        .footer-banner img { width: 100%; display: block; }
+
+        /* ── EDIT HINT ── */
+        .edit-hint {
+            background: rgba(255,215,0,0.05);
+            border: 1px dashed rgba(255,215,0,0.2);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 20px;
+            font-size: 0.72rem;
+            color: #887744;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <a href="index.html" class="nav-logo">
+        <img src="https://simp6.cuckcapital.cr/images4/AA5AbUDpVdSBqvvBp2kcKLIbKz6GwG_eEvxNc8DHoKVk14En6GaEiEKmPlCr7qaKl_trsy4gXF9GmKC6ASeuDWVbonMFuWjDHhQE2RodKNiVFqwGpWfYC9zsIqMjvCPIDgS603HIrnhDXQxK9K9XZezP9E-G8oPNV1gH10kjSAaMk_iX88Lo3D3e8749fb9f26430ab7.png" alt="Mamako Loko">
+        <div>
+            <div class="nav-brand">MAMAKO LOKO</div>
+            <div class="nav-sub">Raid Store</div>
+        </div>
+    </a>
+    <a href="index.html" class="nav-back">
+        <i class="fas fa-arrow-left"></i>
+        <span>Ver Catálogo</span>
+    </a>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+    <div class="badge"><i class="fas fa-image"></i> Galeria de Prints</div>
+    <div class="page-title">Conta do <span>Vazio Premium</span></div>
+    <div class="page-code">Cód: 001 · Alto Nível</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+
+    <!-- GALLERY COLUMN -->
+    <div>
+        <!-- Substitua as URLs abaixo pelas imagens da conta -->
+        <div class="gallery-grid" id="galleryGrid">
+        </div>
+    </div>
+
+    <!-- DESCRIPTION COLUMN -->
+    <div class="desc-card">
+        <div class="desc-header">
+            <div class="desc-label">Detalhes da Conta</div>
+            <div class="desc-title">CONTA DO VAZIO PREMIUM – ALTO NÍVEL</div>
+        </div>
+        <div class="desc-body">
+
+            <!-- Status pills -->
+            <div class="desc-info-grid" style="margin-top:4px; margin-bottom:18px;">
+                <div class="info-pill">
+                    <div class="label">E-mail</div>
+                    <div class="value">✓ Alterável</div>
+                </div>
+                <div class="info-pill">
+                    <div class="label">Links</div>
+                    <div class="value">✓ Sem vínculos</div>
+                </div>
+                <div class="info-pill">
+                    <div class="label">Promo Code</div>
+                    <div class="value">✓ Aceita</div>
+                </div>
+                <div class="info-pill">
+                    <div class="label">Nível</div>
+                    <div class="value gold">Alto Nível</div>
+                </div>
+            </div>
+
+            <!-- Míticos -->
+            <div class="desc-section">
+                <div class="desc-section-title"><i class="fas fa-star"></i> Míticos</div>
+                <ul class="desc-list">
+                    <li><strong>Embrys</strong></li>
+                    <li><strong>Mikage</strong></li>
+                </ul>
+            </div>
+
+            <!-- Lendários do Vazio -->
+            <div class="desc-section">
+                <div class="desc-section-title"><i class="fas fa-gem"></i> Lendários do Vazio</div>
+                <ul class="desc-list">
+                    <li>Yumeko</li>
+                    <li>Arbitra <strong>Bless 6★</strong></li>
+                    <li>Graazur</li>
+                    <li>Leonardo</li>
+                    <li>Nekhret</li>
+                    <li>2× Cardiel</li>
+                    <li>Karilon</li>
+                    <li>Rakka</li>
+                    <li>Titus</li>
+                </ul>
+            </div>
+
+            <!-- Outros Lendários -->
+            <div class="desc-section">
+                <div class="desc-section-title"><i class="fas fa-crown"></i> Outros Lendários em Destaque</div>
+                <ul class="desc-list">
+                    <li>Gnut</li>
+                    <li>Hilvi</li>
+                    <li>Gurptuk</li>
+                    <li>Rotos</li>
+                    <li>Lilitu</li>
+                    <li>Ratão</li>
+                    <li>Falmond</li>
+                    <li>Oella</li>
+                    <li>Fabian</li>
+                    <li>Pallas</li>
+                    <li>Keberon</li>
+                    <li>Masahiro</li>
+                    <li>Pelops</li>
+                    <li>Cheshire</li>
+                    <li>Edward</li>
+                    <li style="color:#666; font-style:italic;">... e muitos outros!</li>
+                </ul>
+            </div>
+
+            <!-- Preço -->
+            <div class="price-block">
+                <div>
+                    <div class="price-label">Valor do Investimento</div>
+                    <div class="price-value">R$ 1.000</div>
+                </div>
+                <div class="price-badge">DISPONÍVEL</div>
+            </div>
+
+            <!-- CTA -->
+            <a href="https://api.whatsapp.com/send?phone=5561993935402&text=Olá Mamako! Vi a galeria da conta [Código 001] - Conta do Vazio Premium e gostaria de fechar negócio. Ainda está disponível?"
+               target="_blank"
+               class="cta-btn">
+                <i class="fab fa-whatsapp"></i>
+                <span>Comprar via WhatsApp</span>
+            </a>
+
+            <div class="seller-note">
+                Conta vendida por <strong>Sergio Galdino</strong>.<br>
+                Pronta para conteúdo avançado, arena e progressão de alto nível!
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER BANNER -->
+<div class="footer-banner">
+    <a href="https://api.whatsapp.com/send?phone=5561993935402&text=Olá Mamako! Vi o catálogo e quero negociar uma conta." target="_blank">
+        <img src="https://simp6.cuckcapital.cr/images4/aaaa6d6ec5adc6ba3d07.png" alt="Fale com o Mamako no WhatsApp">
+    </a>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lbClose"><i class="fas fa-times"></i></button>
+
+    <button class="lb-btn lightbox-arrow-left" id="lbPrev"><i class="fas fa-chevron-left"></i></button>
+    <button class="lb-btn lightbox-arrow-right" id="lbNext"><i class="fas fa-chevron-right"></i></button>
+
+    <div class="lightbox-inner">
+        <div class="lightbox-img-wrap">
+            <img id="lbImg" src="" alt="Print da conta">
+        </div>
+        <div class="lightbox-nav">
+            <button class="lb-btn" id="lbPrev2"><i class="fas fa-chevron-left"></i></button>
+            <div class="lb-counter" id="lbCounter">1 / 1</div>
+            <button class="lb-btn" id="lbNext2"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* ==============================================
+       CONFIGURAÇÃO DAS IMAGENS
+       Adicione ou remova URLs no array abaixo.
+       A ordem das imagens segue a ordem do array.
+    ============================================== */
+    const images = [
+        {
+            url: "https://criarleal.github.io/mamacolokostore/conta-001/1.jpg"
+        },
+        {
+            url: "https://criarleal.github.io/mamacolokostore/conta-001/2.jpg"
+        },
+        {
+            url: "https://criarleal.github.io/mamacolokostore/conta-001/3.jpg"
+        },
+        {
+            url: "https://criarleal.github.io/mamacolokostore/conta-001/4.jpg"
+        },
+        {
+            url: "https://criarleal.github.io/mamacolokostore/conta-001/5.jpg"
+        },
+        {
+            url: "https://criarleal.github.io/mamacolokostore/conta-001/6.jpg"
+        },
+        {
+            url: "https://criarleal.github.io/mamacolokostore/conta-001/7.jpg"
+        }
+    ];
+    /* ==============================================
+       FIM DA CONFIGURAÇÃO
+    ============================================== */
+
+    let current = 0;
+    const grid    = document.getElementById('galleryGrid');
+    const lb      = document.getElementById('lightbox');
+    const lbImg   = document.getElementById('lbImg');
+    const lbCount = document.getElementById('lbCounter');
+
+    function buildGrid() {
+        grid.innerHTML = '';
+        images.forEach((img, i) => {
+            const div = document.createElement('div');
+            div.className = 'thumb';
+            div.innerHTML = `
+                <img src="${img.url}" alt="${img.caption}" loading="lazy">
+                <div class="thumb-overlay"><i class="fas fa-expand"></i></div>
+                <div class="thumb-num">${i + 1} / ${images.length}</div>
+            `;
+            div.addEventListener('click', () => openLightbox(i));
+            grid.appendChild(div);
+        });
+    }
+
+    function openLightbox(i) {
+        current = i;
+        updateLb();
+        lb.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        lb.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function updateLb() {
+        lbImg.src = images[current].url;
+        lbImg.alt = images[current].caption;
+        lbCount.textContent = `${current + 1} / ${images.length}`;
+    }
+
+    function prevImg() { current = (current - 1 + images.length) % images.length; updateLb(); }
+    function nextImg() { current = (current + 1) % images.length; updateLb(); }
+
+    document.getElementById('lbClose').addEventListener('click', closeLightbox);
+    document.getElementById('lbPrev').addEventListener('click', prevImg);
+    document.getElementById('lbNext').addEventListener('click', nextImg);
+    document.getElementById('lbPrev2').addEventListener('click', prevImg);
+    document.getElementById('lbNext2').addEventListener('click', nextImg);
+
+    lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+
+    document.addEventListener('keydown', e => {
+        if (!lb.classList.contains('active')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') prevImg();
+        if (e.key === 'ArrowRight') nextImg();
+    });
+
+    // Touch swipe
+    let touchStartX = 0;
+    lb.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; });
+    lb.addEventListener('touchend', e => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) diff > 0 ? nextImg() : prevImg();
+    });
+
+    buildGrid();
+</script>
+</body>
+</html>
