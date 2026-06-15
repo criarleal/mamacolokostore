@@ -279,7 +279,9 @@
                 image: "https://simp6.cuckcapital.cr/images4/imagef1c3452b07898ab2.png",
                 priceBrl: 1000,
                 priceUsd: 200,
-                label: "Cód: 001"
+                label: "Cód: 001",
+                href: "",
+                printsHref: ""
             },
             {
                 id: "002",
@@ -289,7 +291,9 @@
                 image: "https://simp6.cuckcapital.cr/images4/image4cc88da53ca357e7.png",
                 priceBrl: 800,
                 priceUsd: 160,
-                label: "Cód: 002"
+                label: "Cód: 002",
+                href: "",
+                printsHref: ""
             },
             {
                 id: "003",
@@ -299,7 +303,9 @@
                 image: "https://simp6.cuckcapital.cr/images4/imageca6e580f9f111883.png",
                 priceBrl: 1500,
                 priceUsd: 290,
-                label: "Cód: 003"
+                label: "Cód: 003",
+                href: "",
+                printsHref: ""
             },
             {
                 id: "004",
@@ -309,7 +315,9 @@
                 image: "https://simp6.cuckcapital.cr/images4/image3403d718c365810c.png",
                 priceBrl: 750,
                 priceUsd: 150,
-                label: "Cód: 004"
+                label: "Cód: 004",
+                href: "",
+                printsHref: ""
             },
             {
                 id: "005",
@@ -319,7 +327,9 @@
                 image: "https://simp6.cuckcapital.cr/images4/image21dccb93a1da5b95.png",
                 priceBrl: 280,
                 priceUsd: 55,
-                label: "Cód: 005"
+                label: "Cód: 005",
+                href: "",
+                printsHref: ""
             },
             {
                 id: "006",
@@ -329,7 +339,9 @@
                 image: "https://simp6.cuckcapital.cr/images4/image00f115734ac708df.png",
                 priceBrl: 200,
                 priceUsd: 40,
-                label: "Cód: 006"
+                label: "Cód: 006",
+                href: "",
+                printsHref: ""
             }
         ];
 
@@ -398,11 +410,17 @@
                     `Olá Mamako! Vi a conta [Código ${acc.id}] - ${acc.title} no catálogo e gostaria de ver todos os prints de detalhes dela. Pode enviar-me?`
                 );
                 const whatsappPrintsLink = `https://api.whatsapp.com/send?phone=5561993935402&text=${encodedPrintsMessage}`;
+                const printsLink = acc.printsHref && acc.printsHref.trim() !== ""
+                    ? acc.printsHref
+                    : whatsappPrintsLink;
 
                 const encodedMessage = encodeURIComponent(
                     `Olá Mamako! Gostaria de fechar negócio na conta [Código ${acc.id}] - ${acc.title} (${acc.tagline}) no valor de ${priceFormatted}. Ainda está disponível?`
                 );
                 const whatsappLink = `https://api.whatsapp.com/send?phone=5561993935402&text=${encodedMessage}`;
+                const finalLink = acc.href && acc.href.trim() !== ""
+                    ? acc.href
+                    : whatsappLink;
 
                 const card = `
                     <div class="bg-brand-card border border-neutral-800/80 rounded-2xl overflow-hidden shadow-xl hover:scale-[1.02] hover:border-brand-orange/40 transition-all duration-300 flex flex-col justify-between group">
@@ -430,7 +448,7 @@
                                     <span class="font-bold text-white font-mono">${acc.power}</span>
                                 </div>
 
-                                <a href="${whatsappPrintsLink}" 
+                                <a href="${printsLink}" 
                                    target="_blank"
                                    class="w-full inline-flex items-center justify-center space-x-2 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800/80 hover:border-brand-orange/30 text-gray-300 hover:text-white text-xs font-bold py-2.5 px-4 rounded-xl transition-all shadow-sm">
                                     <i class="fas fa-images text-brand-orange"></i>
@@ -451,7 +469,7 @@
                                     </div>
                                 </div>
 
-                                <a href="${whatsappLink}" 
+                                <a href="${finalLink}" 
                                    target="_blank"
                                    class="w-full inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-3.5 px-4 rounded-xl transition-all shadow-md active:scale-95 duration-200">
                                     <i class="fab fa-whatsapp text-base"></i>
