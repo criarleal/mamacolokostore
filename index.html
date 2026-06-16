@@ -15,8 +15,6 @@
         rel="stylesheet">
     <!-- Ícones Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- PapaParse para ler o Google Sheets de forma segura e sem erros de vírgula -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -213,7 +211,7 @@
                     pretendida para fechar negócio diretamente através do WhatsApp.</p>
             </div>
 
-            <!-- Efeito de Loading Visual enquanto lê os dados do Google Sheets -->
+            <!-- Efeito de Loading Visual enquanto lê os dados do Supabase -->
             <div id="loading" class="text-center py-12">
                 <i class="fas fa-spinner animate-spin text-brand-orange text-4xl mb-4"></i>
                 <p class="text-gray-400">A carregar catálogo em tempo real...</p>
@@ -323,52 +321,58 @@
     </footer>
 
     <script>
-        // LINK PÚBLICO DO GOOGLE SHEETS EM FORMATO CSV
-        const googleSheetCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGMz9XAk5spv5FFN585VM6g6toC79iulNUFqYB76MQmRTuhjnyTjRSybOuyhZ5FImNompOX0eFjZI0/pub?output=csv";
+        // ── CONFIGURAÇÕES DO SUPABASE ─────────────────────────────────
+        // Substitui com os dados reais do teu projeto do Supabase
+        const SUPABASE_URL = "https://SEU_PROJETO.supabase.co"; 
+        const SUPABASE_ANON_KEY = "SUA_ANON_KEY_AQUI";
+        const TABELA_REQUISITADA = "accounts"; // Nome da tabela no teu banco de dados
 
         let accountsData = [];
         let currentCurrency = 'BRL';
 
-        // Carregar dados de forma assíncrona do Google Sheets
-        async function fetchSheetData() {
+        // Carregar dados de forma assíncrona do Supabase utilizando a REST API nativa
+        async function fetchSupabaseData() {
             try {
-                const response = await fetch(googleSheetCsvUrl);
-                const csvText = await response.text();
-
-                // Parser robusto com o PapaParse que suporta quebras de linha e vírgulas no meio das células
-                Papa.parse(csvText, {
-                    header: true,
-                    skipEmptyLines: true,
-                    complete: function (results) {
-                        accountsData = results.data.map(row => ({
-                            id: row.id ? row.id.trim() : '',
-                            title: row.title ? row.title.trim() : '',
-                            power: row.power ? row.power.trim() : '',
-                            tagline: row.tagline ? row.tagline.trim() : '',
-                            image: row.image ? row.image.trim() : '',
-                            priceBrl: parseFloat(row.priceBrl) || 0,
-                            priceUsd: parseFloat(row.priceUsd) || 0,
-                            label: row.label ? row.label.trim() : '',
-                            status: row.status ? row.status.trim().toUpperCase() : 'DISPONÍVEL'
-                        }));
-
-                        // Oculta loading e renderiza as contas na tela
-                        document.getElementById('loading').classList.add('hidden');
-                        document.getElementById('accountsContainer').classList.remove('hidden');
-                        renderAccounts();
-                    },
-                    error: function (err) {
-                        console.error("Erro ao processar o CSV: ", err);
-                        fallbackToDefault();
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/${TABELA_REQUISITADA}?select=*`, {
+                    method: "GET",
+                    headers: {
+                        "apikey": SUPABASE_ANON_KEY,
+                        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+                        "Content-Type": "application/json"
                     }
                 });
+
+                if (!response.ok) {
+                    throw new Error(`Erro na API: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                // Tratamento e mapeamento seguro dos dados vindos da tabela do Supabase
+                accountsData = data.map(row => ({
+                    id: row.id ? String(row.id).trim() : '',
+                    title: row.title ? String(row.title).trim() : '',
+                    power: row.power ? String(row.power).trim() : '',
+                    tagline: row.tagline ? String(row.tagline).trim() : '',
+                    image: row.image ? String(row.image).trim() : '',
+                    priceBrl: parseFloat(row.priceBrl) || 0,
+                    priceUsd: parseFloat(row.priceUsd) || 0,
+                    label: row.label ? String(row.label).trim() : '',
+                    status: row.status ? String(row.status).trim().toUpperCase() : 'DISPONÍVEL'
+                }));
+
+                // Oculta loading e renderiza as contas na tela
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('accountsContainer').classList.remove('hidden');
+                renderAccounts();
+
             } catch (error) {
-                console.error("Erro ao buscar planilha do Google Sheets: ", error);
-                fallbackToDefault();
+                console.error("Erro ao buscar dados do Supabase: ", error);
+                fallbackToDefault(); // Se falhar, usa os dados estáticos antigos por segurança
             }
         }
 
-        // Fallback de segurança caso a planilha fique offline ou o link esteja errado
+        // Fallback de segurança caso a API fique offline
         function fallbackToDefault() {
             accountsData = [
                 {
@@ -539,8 +543,8 @@
             });
         });
 
-        // Inicializar lendo do Google Sheets
-        window.onload = fetchSheetData;
+        // Inicializar buscando os dados do Supabase
+        window.onload = fetchSupabaseData;
     </script>
 </body>
 
