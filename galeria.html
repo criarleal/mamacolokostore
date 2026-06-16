@@ -139,16 +139,9 @@
                 <!-- Corpo do Card -->
                 <div class="p-5 space-y-6">
 
-                    <!-- Pílulas de Status Genéricas -->
-                    <div class="grid grid-cols-2 gap-2 text-center">
-                        <div class="bg-white/5 border border-brand-border p-2.5 rounded-lg">
-                            <p class="text-[8px] text-gray-500 uppercase tracking-widest font-bold">E-mail</p>
-                            <p class="text-emerald-400 text-xs font-bold mt-1">✓ Alterável</p>
-                        </div>
-                        <div class="bg-white/5 border border-brand-border p-2.5 rounded-lg">
-                            <p class="text-[8px] text-gray-500 uppercase tracking-widest font-bold">Vínculos</p>
-                            <p class="text-emerald-400 text-xs font-bold mt-1">✓ Nenhum</p>
-                        </div>
+                    <!-- Pílulas de Status Dinâmicas (Antes eram estáticas) -->
+                    <div id="statusPillsArea" class="grid grid-cols-2 gap-2 text-center">
+                        <!-- Gerado dinamicamente via JS -->
                     </div>
 
                     <!-- Secções Dinâmicas de Heróis (Míticos, Lendários Vazio, Outros) -->
@@ -279,6 +272,11 @@
                                 priceUsd: parseFloat(row.priceUsd) || 0,
                                 label: row.label.trim(),
                                 status: row.status ? row.status.trim().toUpperCase() : 'DISPONÍVEL',
+                                // Novas colunas dinâmicas lidas da planilha
+                                email_status: row.email_status ? row.email_status.trim() : '✓ Alterável',
+                                links_status: row.links_status ? row.links_status.trim() : '✓ Sem vínculos',
+                                promo_code: row.promo_code ? row.promo_code.trim() : '✓ Aceita',
+                                level: row.level ? row.level.trim() : 'Alto Nível',
                                 // As colunas de heróis e fotos devem ser separadas por vírgulas no Google Sheets
                                 miticos: row.miticos ? row.miticos.split(',') : [],
                                 vazio_lendarios: row.vazio_lendarios ? row.vazio_lendarios.split(',') : [],
@@ -319,6 +317,27 @@
 
             // Tratamento de Moeda Padrão BRL
             document.getElementById('priceLabel').textContent = `R$ ${accountInfo.priceBrl.toLocaleString('pt-BR')}`;
+
+            // Gerar Pílulas de Status Dinâmicas no Card Direito
+            const statusPillsArea = document.getElementById('statusPillsArea');
+            statusPillsArea.innerHTML = `
+                <div class="bg-white/5 border border-brand-border p-2.5 rounded-lg">
+                    <p class="text-[8px] text-gray-500 uppercase tracking-widest font-bold">E-mail</p>
+                    <p class="text-emerald-400 text-xs font-bold mt-1">${accountInfo.email_status}</p>
+                </div>
+                <div class="bg-white/5 border border-brand-border p-2.5 rounded-lg">
+                    <p class="text-[8px] text-gray-400 uppercase tracking-widest font-bold">Vínculos</p>
+                    <p class="text-emerald-400 text-xs font-bold mt-1">${accountInfo.links_status}</p>
+                </div>
+                <div class="bg-white/5 border border-brand-border p-2.5 rounded-lg">
+                    <p class="text-[8px] text-gray-400 uppercase tracking-widest font-bold">Promo Code</p>
+                    <p class="text-emerald-400 text-xs font-bold mt-1">${accountInfo.promo_code}</p>
+                </div>
+                <div class="bg-white/5 border border-brand-border p-2.5 rounded-lg">
+                    <p class="text-[8px] text-gray-400 uppercase tracking-widest font-bold">Nível</p>
+                    <p class="text-brand-gold text-xs font-bold mt-1">${accountInfo.level}</p>
+                </div>
+            `;
 
             // Tratar Status de Estoque
             const isSold = accountInfo.status === 'VENDIDO';
