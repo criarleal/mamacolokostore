@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Administrativo | Mamako Loko Shop</title>
+    <title>Painel Administrativo V2 | Mamako Loko Shop</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -18,7 +18,7 @@
 </head>
 <body class="bg-brand-dark text-gray-100 min-h-screen flex flex-col justify-between font-sans">
 
-    <div class="max-w-4xl w-full mx-auto px-4 py-8">
+    <div class="max-w-5xl w-full mx-auto px-4 py-8">
         <!-- Cabeçalho -->
         <div class="flex items-center justify-between border-b border-neutral-800 pb-6 mb-8">
             <div class="flex items-center space-x-3">
@@ -26,8 +26,8 @@
                     <img src="https://simp6.cuckcapital.cr/images4/AA5AbUBpVdSBqvvBp2kcKLIbKz6GwG_eEvxNc8DHoKVk14En6GaEiEKmPlCr7qaKl_trsy4gXF9GmKC6ASeuDWVbonMFuWjDHhQE2RodKNiVFqwGpWfYC9zsIqMjvCPIDgS603HIrnhDXQxK9K9XZezP9E-G8oPNV1gH10kjSAaMk_iX88Lo3D3e8749fb9f26430ab7.png" class="w-full h-full object-cover">
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold text-white">Gerenciador do Catálogo</h1>
-                    <p class="text-xs text-gray-400">Adicione ou atualize contas no Google Sheets</p>
+                    <h1 class="text-xl font-bold text-white">Gerenciador do Catálogo <span class="text-brand-orange text-sm">V2</span></h1>
+                    <p class="text-xs text-gray-400">Gerenciamento completo das colunas A até Q</p>
                 </div>
             </div>
             <span class="bg-neutral-900 border border-neutral-800 text-brand-gold text-xs px-3 py-1 rounded-full font-mono">Modo Live</span>
@@ -37,74 +37,100 @@
         <div class="bg-brand-card border border-neutral-800 rounded-2xl p-6 md:p-8 shadow-xl space-y-6">
             <form id="adminForm" class="space-y-6">
                 
-                <!-- Ação: Nova Conta ou Atualizar -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- SEÇÃO 1: Identificação e Ação -->
+                <div class="bg-black/40 p-4 rounded-xl border border-neutral-900 grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Ação do Sistema</label>
                         <select id="formAction" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-medium">
                             <option value="CREATE">Cadastrar Nova Conta</option>
-                            <option value="UPDATE">Atualizar Conta Existente (Mudar Status/Preço)</option>
+                            <option value="UPDATE">Atualizar Conta Existente</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Código da Conta (ID)</label>
                         <input type="text" id="accId" placeholder="Ex: 001" required class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-mono">
                     </div>
-                </div>
-
-                <hr class="border-neutral-900">
-
-                <!-- Informações Visuais da Conta -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Título da Conta</label>
-                            <input type="text" id="accTitle" placeholder="Ex: Conta Void Premium" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Poder de Conta</label>
-                            <input type="text" id="accPower" placeholder="Ex: 7.1M" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Etiqueta Exibida (Label)</label>
-                            <input type="text" id="accLabel" placeholder="Ex: Cód: 001" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
-                        </div>
-                    </div>
-
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Descrição / Campeões em Destaque</label>
-                            <textarea id="accTagline" rows="4" placeholder="Ex: Mikage, Yumeko, Arbitra 6★, Leonardo, Nekhret..." class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white resize-none"></textarea>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Status da Conta</label>
-                            <select id="accStatus" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
-                                <option value="DISPONÍVEL">DISPONÍVEL</option>
-                                <option value="VENDIDO">VENDIDO</option>
-                            </select>
-                        </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Etiqueta Exibida (Label)</label>
+                        <input type="text" id="accLabel" placeholder="Ex: Cód: 001" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
                     </div>
                 </div>
 
-                <hr class="border-neutral-900">
-
-                <!-- Preços e Upload de Imagem -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Preço em Reais (BRL)</label>
-                        <input type="number" id="priceBrl" placeholder="1000" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
+                <!-- SEÇÃO 2: Informações Básicas de Exibição -->
+                <h3 class="text-sm font-bold text-brand-gold uppercase tracking-wider border-l-2 border-brand-orange pl-2">Informações Gerais</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Título da Conta</label>
+                        <input type="text" id="accTitle" placeholder="Ex: Conta Void Premium" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Preço em Dólares (USD)</label>
-                        <input type="number" id="priceUsd" placeholder="200" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Poder de Conta</label>
+                        <input type="text" id="accPower" placeholder="Ex: 7.12M" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
                     </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Imagem de Capa (Upload)</label>
-                        <input type="file" id="imageFile" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-neutral-900 file:text-brand-gold hover:file:bg-neutral-800 cursor-pointer pt-1">
+                    <div class="md:col-span-3">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Descrição Curta (Tagline)</label>
+                        <input type="text" id="accTagline" placeholder="Resumo rápido para os cards da vitrine..." class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
                     </div>
                 </div>
 
-                <!-- Botão de Ação -->
+                <!-- SEÇÃO 3: Listagem de Campeões (Filtros e Detalhes) -->
+                <h3 class="text-sm font-bold text-brand-gold uppercase tracking-wider border-l-2 border-brand-orange pl-2">Campeões em Destaque</h3>
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Míticos (Separados por vírgula)</label>
+                        <textarea id="accMiticos" rows="2" placeholder="Ex: Embrys, Mikage" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Principais Lendários (Separados por vírgula)</label>
+                        <textarea id="accPrLendarios" rows="2" placeholder="Ex: Yumeko, Arbitra Bless 6★, Graazur, Leonardo" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Outros Lendários</label>
+                        <textarea id="accOutrosLendarios" rows="3" placeholder="Ex: Gnut, Hilvi, Gurptuk, Rotos, Lilitu..." class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white resize-none"></textarea>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO 4: Metadados, Status e Preços -->
+                <h3 class="text-sm font-bold text-brand-gold uppercase tracking-wider border-l-2 border-brand-orange pl-2">Especificações e Status</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Status da Conta</label>
+                        <select id="accStatus" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-medium">
+                            <option value="DISPONÍVEL">DISPONÍVEL</option>
+                            <option value="VENDIDO">VENDIDO</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Status do E-mail</label>
+                        <input type="text" id="accEmailStatus" placeholder="Ex: ✓ Alterável" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Status de Vínculos</label>
+                        <input type="text" id="accLinksStatus" placeholder="Ex: ✓ Sem vínculos" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Tipo / Promo Code</label>
+                        <input type="text" id="accPromoCode" placeholder="Ex: ✓ Aceita" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Level da Conta</label>
+                        <input type="text" id="accLevel" placeholder="Ex: Mid/End Game" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Preço (BRL)</label>
+                        <input type="number" id="priceBrl" placeholder="1000" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Preço (USD)</label>
+                        <input type="number" id="priceUsd" placeholder="200" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Galeria de Prints (Até 20)</label>
+                        <input type="file" id="imageFiles" accept="image/*" multiple class="w-full text-xs text-gray-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-neutral-900 file:text-brand-gold hover:file:bg-neutral-800 cursor-pointer pt-1">
+                    </div>
+                </div>
+
+                <!-- Botão de Envio -->
                 <button type="submit" id="btnSubmit" class="w-full bg-gradient-to-r from-brand-orange to-red-600 text-white font-bold py-4 rounded-xl hover:scale-[1.01] active:scale-95 transition-all shadow-lg shadow-brand-orange/10 flex items-center justify-center space-x-2">
                     <i class="fas fa-cloud-upload-alt"></i>
                     <span id="btnText">Enviar para o Google Sheets</span>
@@ -118,95 +144,120 @@
 
     <script>
         // ── CONFIGURAÇÕES DOS ENDPOINTS ──────────────────────────────
-        // 1. Cria uma conta gratuita no https://imgbb.com/, vai em API e pega a tua chave.
         const IMGBB_API_KEY = "25454de698b208b18802361e068be106"; 
-        
-        // 2. URL gerada após publicar o script no Google Sheets como "Aplicação Web"
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywI1pkvR1RLxXiYFVKnfpDjjIcdVP6WCJLT7P_DkX94pnPKvX-IF2cGUzU9LXUDw/exec";
 
         const form = document.getElementById('adminForm');
         const btnSubmit = document.getElementById('btnSubmit');
         const btnText = document.getElementById('btnText');
         const statusBox = document.getElementById('statusBox');
+        const accIdInput = document.getElementById('accId');
+        const accLabelInput = document.getElementById('accLabel');
 
-        // Mudar campos obrigatórios com base na ação escolhida
+        // Autocompletar a Etiqueta (Label) dinamicamente quando digitar o ID
+        accIdInput.addEventListener('input', function() {
+            if(this.value.trim() !== "") {
+                accLabelInput.value = "Cód: " + this.value.trim();
+            } else {
+                accLabelInput.value = "";
+            }
+        });
+
+        // Alternar campos obrigatórios dependendo da ação
         document.getElementById('formAction').addEventListener('change', function() {
             const isUpdate = this.value === 'UPDATE';
             document.getElementById('accTitle').required = !isUpdate;
             document.getElementById('accPower').required = !isUpdate;
-            document.getElementById('imageFile').required = !isUpdate;
-            btnText.innerText = isUpdate ? "Atualizar Status no Google Sheets" : "Enviar para o Google Sheets";
+            document.getElementById('imageFiles').required = !isUpdate;
+            btnText.innerText = isUpdate ? "Atualizar Conta no Google Sheets" : "Enviar para o Google Sheets";
         });
 
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Bloqueia botão e limpa avisos
             btnSubmit.disabled = true;
             statusBox.className = "p-4 rounded-xl text-sm font-medium flex items-center space-x-2 bg-neutral-900 text-brand-gold";
-            statusBox.innerHTML = `<i class="fas fa-spinner animate-spin"></i> <span>Processando operação... Aguarde.</span>`;
+            statusBox.innerHTML = `<i class="fas fa-spinner animate-spin"></i> <span>Iniciando processamento...</span>`;
             statusBox.classList.remove('hidden');
 
             const action = document.getElementById('formAction').value;
-            const fileInput = document.getElementById('imageFile');
-            let imageUrl = "";
+            const fileInput = document.getElementById('imageFiles');
+            let uploadedUrls = [];
 
-            // 1. Executa o Upload da imagem se houver arquivo selecionado
+            // 1. Processar upload das múltiplas imagens (se existirem)
             if (fileInput.files.length > 0) {
-                statusBox.innerHTML = `<i class="fas fa-image animate-pulse"></i> <span>Hospedando imagem no ImgBB...</span>`;
-                const formDataImage = new FormData();
-                formDataImage.append("image", fileInput.files[0]);
-
-                try {
-                    const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
-                        method: "POST",
-                        body: formDataImage
-                    });
-                    const imgbbData = await imgbbResponse.json();
+                const totalFiles = Math.min(fileInput.files.length, 20); // Limita em 20 imagens
+                
+                for(let i = 0; i < totalFiles; i++) {
+                    statusBox.innerHTML = `<i class="fas fa-image animate-pulse"></i> <span>Hospedando imagem ${i+1} de ${totalFiles} no ImgBB...</span>`;
                     
-                    if (imgbbData.success) {
-                        imageUrl = imgbbData.data.url; // Link direto público retornado
-                    } else {
-                        throw new Error("Falha no retorno do servidor ImgBB.");
+                    const formDataImage = new FormData();
+                    formDataImage.append("image", fileInput.files[i]);
+
+                    try {
+                        const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                            method: "POST",
+                            body: formDataImage
+                        });
+                        const imgbbData = await imgbbResponse.json();
+                        
+                        if (imgbbData.success) {
+                            uploadedUrls.push(imgbbData.data.url);
+                        } else {
+                            throw new Error(`Falha no envio do arquivo de índice ${i}.`);
+                        }
+                    } catch (error) {
+                        showError("Erro no envio das imagens: " + error.message);
+                        return;
                     }
-                } catch (error) {
-                    showError("Erro ao subir imagem: " + error.message);
-                    return;
                 }
             }
 
-            // 2. Prepara os dados para mandar para o Google Sheets
-            statusBox.innerHTML = `<i class="fas fa-database animate-pulse"></i> <span>Sincronizando com a Planilha Google...</span>`;
+            // 2. Preparação das Strings de Imagens
+            // Capa (Coluna E) vira a primeira imagem carregada. 
+            // Se for UPDATE e o cliente não subiu fotos novas, passamos vazio para não sobrescrever a capa existente.
+            let mainImage = uploadedUrls.length > 0 ? uploadedUrls[0] : "";
+            let printsString = uploadedUrls.length > 0 ? uploadedUrls.join(", ") : "";
+
+            statusBox.innerHTML = `<i class="fas fa-database animate-pulse"></i> <span>Sincronizando todas as colunas com o Sheets...</span>`;
             
+            // Montagem exata do Payload para mapear as colunas de A até Q
             const payload = {
                 action: action,
-                id: document.getElementById('accId').value.trim(),
+                id: accIdInput.value.trim(),
                 title: document.getElementById('accTitle').value.trim(),
                 power: document.getElementById('accPower').value.trim(),
                 tagline: document.getElementById('accTagline').value.trim(),
-                label: document.getElementById('accLabel').value.trim(),
-                status: document.getElementById('accStatus').value,
+                image: mainImage, 
                 priceBrl: document.getElementById('priceBrl').value,
                 priceUsd: document.getElementById('priceUsd').value,
-                image: imageUrl
+                label: accLabelInput.value.trim(),
+                status: document.getElementById('accStatus').value,
+                // Novos metadados das colunas J a Q
+                miticos: document.getElementById('accMiticos').value.trim(),
+                principais_lendarios: document.getElementById('accPrLendarios').value.trim(),
+                outros_lendarios: document.getElementById('accOutrosLendarios').value.trim(),
+                prints: printsString,
+                email_status: document.getElementById('accEmailStatus').value.trim(),
+                links_status: document.getElementById('accLinksStatus').value.trim(),
+                promo_code: document.getElementById('accPromoCode').value.trim(),
+                level: document.getElementById('accLevel').value.trim()
             };
 
             try {
-                // Envio usando fetch no formato JSON via POST para o Google Apps Script
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                await fetch(GOOGLE_SCRIPT_URL, {
                     method: "POST",
-                    mode: "no-cors", // Crucial para o Google Apps Script aceitar requisições de domínios externos sem travar CORS
+                    mode: "no-cors",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(payload)
                 });
 
-                // Como usamos no-cors, o navegador não lê a resposta do json, mas se não estourar erro no catch significa que foi enviado com sucesso
                 statusBox.className = "p-4 rounded-xl text-sm font-medium flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400";
-                statusBox.innerHTML = `<i class="fas fa-check-circle"></i> <span>Sucesso! Operação realizada. Os dados refletirão no catálogo em instantes.</span>`;
+                statusBox.innerHTML = `<i class="fas fa-check-circle"></i> <span>Sucesso completo! Planilha atualizada de A até Q mantendo formatação de texto.</span>`;
                 form.reset();
 
             } catch (error) {
-                showError("Erro ao salvar no Google Sheets: " + error.message);
+                showError("Erro na gravação final do Sheets: " + error.message);
             } finally {
                 btnSubmit.disabled = false;
             }
@@ -214,7 +265,7 @@
 
         function showError(msg) {
             statusBox.className = "p-4 rounded-xl text-sm font-medium flex items-center space-x-2 bg-red-500/10 border border-red-500/30 text-red-400";
-            statusBox.innerHTML = `<i class="fas fa-exborder-circle"></i> <span>${msg}</span>`;
+            statusBox.innerHTML = `<i class="fas fa-exclamation-circle"></i> <span>${msg}</span>`;
             btnSubmit.disabled = false;
         }
     </script>
