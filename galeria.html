@@ -279,7 +279,7 @@
                                 level: row.level ? row.level.trim() : '',
                                 // Listas de heróis e fotos separadas por vírgulas
                                 miticos: row.miticos ? row.miticos.split(',') : [],
-                                vazio_lendarios: row.vazio_lendarios ? row.vazio_lendarios.split(',') : [],
+                                principais_lendarios: row.principais_lendarios ? row.principais_lendarios.split(',') : [],
                                 outros_lendarios: row.outros_lendarios ? row.outros_lendarios.split(',') : [],
                                 prints: row.prints ? row.prints.split(',').map(s => s.trim()) : []
                             };
@@ -363,7 +363,7 @@
 
             const sectionsToBuild = [
                 { title: 'Heróis Míticos', icon: 'fa-star', color: 'text-amber-500', data: accountInfo.miticos },
-                { title: 'Lendários Principais', icon: 'fa-gem', color: 'text-purple-500', data: accountInfo.vazio_lendarios },
+                { title: 'Lendários Principais', icon: 'fa-gem', color: 'text-purple-500', data: accountInfo.principais_lendarios },
                 { title: 'Lendários Destaque', icon: 'fa-crown', color: 'text-yellow-500', data: accountInfo.outros_lendarios }
             ];
 
