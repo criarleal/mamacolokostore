@@ -272,12 +272,12 @@
                                 priceUsd: parseFloat(row.priceUsd) || 0,
                                 label: row.label.trim(),
                                 status: row.status ? row.status.trim().toUpperCase() : 'DISPONÍVEL',
-                                // Novas colunas dinâmicas lidas da planilha
-                                email_status: row.email_status ? row.email_status.trim() : '✓ Alterável',
-                                links_status: row.links_status ? row.links_status.trim() : '✓ Sem vínculos',
-                                promo_code: row.promo_code ? row.promo_code.trim() : '✓ Aceita',
-                                level: row.level ? row.level.trim() : 'Alto Nível',
-                                // As colunas de heróis e fotos devem ser separadas por vírgulas no Google Sheets
+                                // Se estiver vazio no Sheets, guarda como string vazia em vez de usar padrão fixo
+                                email_status: row.email_status ? row.email_status.trim() : '',
+                                links_status: row.links_status ? row.links_status.trim() : '',
+                                promo_code: row.promo_code ? row.promo_code.trim() : '',
+                                level: row.level ? row.level.trim() : '',
+                                // Listas de heróis e fotos separadas por vírgulas
                                 miticos: row.miticos ? row.miticos.split(',') : [],
                                 vazio_lendarios: row.vazio_lendarios ? row.vazio_lendarios.split(',') : [],
                                 outros_lendarios: row.outros_lendarios ? row.outros_lendarios.split(',') : [],
@@ -318,26 +318,26 @@
             // Tratamento de Moeda Padrão BRL
             document.getElementById('priceLabel').textContent = `R$ ${accountInfo.priceBrl.toLocaleString('pt-BR')}`;
 
-            // Gerar Pílulas de Status Dinâmicas no Card Direito
             const statusPillsArea = document.getElementById('statusPillsArea');
-            statusPillsArea.innerHTML = `
-                <div class="bg-white/5 border border-brand-border p-2.5 rounded-lg">
-                    <p class="text-[8px] text-gray-500 uppercase tracking-widest font-bold">E-mail</p>
-                    <p class="text-emerald-400 text-xs font-bold mt-1">${accountInfo.email_status}</p>
-                </div>
-                <div class="bg-white/5 border border-brand-border p-2.5 rounded-lg">
-                    <p class="text-[8px] text-gray-400 uppercase tracking-widest font-bold">Vínculos</p>
-                    <p class="text-emerald-400 text-xs font-bold mt-1">${accountInfo.links_status}</p>
-                </div>
-                <div class="bg-white/5 border border-brand-border p-2.5 rounded-lg">
-                    <p class="text-[8px] text-gray-400 uppercase tracking-widest font-bold">Promo Code</p>
-                    <p class="text-emerald-400 text-xs font-bold mt-1">${accountInfo.promo_code}</p>
-                </div>
-                <div class="bg-white/5 border border-brand-border p-2.5 rounded-lg">
-                    <p class="text-[8px] text-gray-400 uppercase tracking-widest font-bold">Nível</p>
-                    <p class="text-brand-gold text-xs font-bold mt-1">${accountInfo.level}</p>
-                </div>
-            `;
+            statusPillsArea.innerHTML = '';
+
+            const pills = [
+                { label: 'E-mail', value: accountInfo.email_status, color: 'text-emerald-400' },
+                { label: 'Vínculos', value: accountInfo.links_status, color: 'text-emerald-400' },
+                { label: 'Promo Code', value: accountInfo.promo_code, color: 'text-emerald-400' },
+                { label: 'Nível', value: accountInfo.level, color: 'text-brand-gold' }
+            ];
+
+            pills.forEach(pill => {
+                if (pill.value && pill.value.trim() !== "") {
+                    statusPillsArea.innerHTML += `
+                        <div class="bg-white/5 border border-brand-border p-2.5 rounded-lg">
+                            <p class="text-[8px] text-gray-500 uppercase tracking-widest font-bold">${pill.label}</p>
+                            <p class="${pill.color} text-xs font-bold mt-1">${pill.value}</p>
+                        </div>
+                    `;
+                }
+            });
 
             // Tratar Status de Estoque
             const isSold = accountInfo.status === 'VENDIDO';
