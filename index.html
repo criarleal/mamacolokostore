@@ -208,12 +208,15 @@
             </div>
 
             <!-- Seletor de Abas (Estoque Oficial / Vendedores Parceiros) -->
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12 max-w-md mx-auto">
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12 max-w-xl mx-auto">
                 <button id="tab-propria" class="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold font-cinzel text-xs tracking-wider transition-all duration-300 border border-brand-orange/40 bg-gradient-to-r from-brand-orange to-red-600 text-white shadow-lg shadow-brand-orange/15 hover:scale-105">
                     Estoque Oficial <span id="count-propria" class="ml-1.5 text-[10px] bg-black/35 px-2 py-0.5 rounded-full text-brand-gold font-sans font-semibold">...</span>
                 </button>
                 <button id="tab-parceiros" class="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold font-cinzel text-xs tracking-wider transition-all duration-300 border border-neutral-800 bg-neutral-900/60 text-gray-400 hover:text-white hover:border-neutral-700 hover:scale-105">
                     Contas de Parceiros <span id="count-parceiros" class="ml-1.5 text-[10px] bg-black/35 px-2 py-0.5 rounded-full text-gray-400 font-sans font-semibold">...</span>
+                </button>
+                <button id="tab-vendidas" class="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold font-cinzel text-xs tracking-wider transition-all duration-300 border border-neutral-800 bg-neutral-900/60 text-gray-400 hover:text-white hover:border-neutral-700 hover:scale-105">
+                    Vendidas <span id="count-vendidas" class="ml-1.5 text-[10px] bg-black/35 px-2 py-0.5 rounded-full text-gray-400 font-sans font-semibold">...</span>
                 </button>
             </div>
 
@@ -288,34 +291,7 @@
         </div>
     </section>
 
-    <section class="py-12 bg-gradient-to-b from-brand-dark to-neutral-950 border-t border-neutral-900">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="relative bg-gradient-to-r from-neutral-900 via-brand-card to-neutral-900 border border-neutral-800 p-8 sm:p-10 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 group hover:border-brand-orange/40 transition-all duration-300">
-                <div class="absolute -right-16 -bottom-16 w-44 h-44 bg-brand-orange/10 rounded-full blur-3xl group-hover:bg-brand-orange/20 transition-all duration-500"></div>
-                
-                <div class="space-y-3 text-center md:text-left z-10">
-                    <span class="bg-brand-orange/10 border border-brand-orange/30 text-brand-gold text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full">
-                        Estoque Cooperativo
-                    </span>
-                    <h3 class="font-cinzel text-xl sm:text-2xl font-black text-white tracking-wide">
-                        Procurando mais opções?<br>
-                        <span class="bg-gradient-to-r from-brand-gold to-brand-orange bg-clip-text text-transparent">Explore as contas dos nossos parceiros</span>
-                    </h3>
-                    <p class="text-xs text-gray-400 max-w-md leading-relaxed">
-                        Trabalhamos com fornecedores e jogadores selecionados para trazer ainda mais diversidade ao catálogo. Segurança total garantida e intermediada por nós!
-                    </p>
-                </div>
 
-                <div class="w-full md:w-auto text-center z-10 shrink-0">
-                    <a href="#catalogo" id="cta-parceiros"
-                       class="inline-flex items-center space-x-2 bg-gradient-to-r from-brand-orange to-red-600 hover:scale-105 text-white text-sm font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-brand-orange/20 transition-all duration-200 w-full sm:w-auto justify-center">
-                        <span>Ver Contas Parceiros</span>
-                        <i class="fas fa-arrow-right text-xs"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <a href="https://api.whatsapp.com/send?phone=5561993935402&text=Olá Mamako! Gostaria de consultar contas disponíveis para o Raid."
         target="_blank"
@@ -399,7 +375,9 @@
                         if (urlId) {
                             const targetAcc = rawAccountsData.find(a => a.id === urlId);
                             if (targetAcc) {
-                                if (targetAcc.tipo === 'parceiro') {
+                                if (targetAcc.status === 'VENDIDO') {
+                                    activeTab = 'vendida';
+                                } else if (targetAcc.tipo === 'parceiro') {
                                     activeTab = 'parceiro';
                                 }
                             }
@@ -448,11 +426,13 @@
         }
 
         function updateTabCounters() {
-            const countPropria = rawAccountsData.filter(acc => acc.tipo === 'propria' || acc.tipo === '').length;
-            const countParceiros = rawAccountsData.filter(acc => acc.tipo === 'parceiro').length;
+            const countPropria = rawAccountsData.filter(acc => (acc.tipo === 'propria' || acc.tipo === '') && acc.status !== 'VENDIDO').length;
+            const countParceiros = rawAccountsData.filter(acc => acc.tipo === 'parceiro' && acc.status !== 'VENDIDO').length;
+            const countVendidas = rawAccountsData.filter(acc => acc.status === 'VENDIDO').length;
 
             document.getElementById('count-propria').textContent = countPropria;
             document.getElementById('count-parceiros').textContent = countParceiros;
+            document.getElementById('count-vendidas').textContent = countVendidas;
         }
 
         // Função para alterar abas
@@ -460,26 +440,36 @@
             activeTab = tab;
             const tabPropria = document.getElementById('tab-propria');
             const tabParceiros = document.getElementById('tab-parceiros');
+            const tabVendidas = document.getElementById('tab-vendidas');
 
             const activeClasses = ['bg-gradient-to-r', 'from-brand-orange', 'to-red-600', 'text-white', 'border-brand-orange/40', 'shadow-lg', 'shadow-brand-orange/15'];
             const inactiveClasses = ['bg-neutral-900/60', 'text-gray-400', 'border-neutral-800', 'hover:text-white', 'hover:border-neutral-700'];
 
+            [tabPropria, tabParceiros, tabVendidas].forEach(btn => {
+                if (btn) {
+                    btn.className = "w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold font-cinzel text-xs tracking-wider transition-all duration-300 border hover:scale-105";
+                    btn.classList.add(...inactiveClasses);
+                }
+            });
+
             if (tab === 'propria') {
-                tabPropria.className = "w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold font-cinzel text-xs tracking-wider transition-all duration-300 border hover:scale-105";
-                tabPropria.classList.add(...activeClasses);
-                tabParceiros.className = "w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold font-cinzel text-xs tracking-wider transition-all duration-300 border hover:scale-105";
-                tabParceiros.classList.add(...inactiveClasses);
-                
-                // Filtrar para próprias
-                accountsData = rawAccountsData.filter(acc => acc.tipo === 'propria' || acc.tipo === '');
-            } else {
-                tabParceiros.className = "w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold font-cinzel text-xs tracking-wider transition-all duration-300 border hover:scale-105";
-                tabParceiros.classList.add(...activeClasses);
-                tabPropria.className = "w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold font-cinzel text-xs tracking-wider transition-all duration-300 border hover:scale-105";
-                tabPropria.classList.add(...inactiveClasses);
-                
-                // Filtrar para parceiros
-                accountsData = rawAccountsData.filter(acc => acc.tipo === 'parceiro');
+                if (tabPropria) {
+                    tabPropria.classList.remove(...inactiveClasses);
+                    tabPropria.classList.add(...activeClasses);
+                }
+                accountsData = rawAccountsData.filter(acc => (acc.tipo === 'propria' || acc.tipo === '') && acc.status !== 'VENDIDO');
+            } else if (tab === 'parceiro') {
+                if (tabParceiros) {
+                    tabParceiros.classList.remove(...inactiveClasses);
+                    tabParceiros.classList.add(...activeClasses);
+                }
+                accountsData = rawAccountsData.filter(acc => acc.tipo === 'parceiro' && acc.status !== 'VENDIDO');
+            } else if (tab === 'vendida') {
+                if (tabVendidas) {
+                    tabVendidas.classList.remove(...inactiveClasses);
+                    tabVendidas.classList.add(...activeClasses);
+                }
+                accountsData = rawAccountsData.filter(acc => acc.status === 'VENDIDO');
             }
 
             renderAccounts();
@@ -662,6 +652,7 @@
         // Eventos das abas do catálogo
         document.getElementById('tab-propria').addEventListener('click', () => switchTab('propria'));
         document.getElementById('tab-parceiros').addEventListener('click', () => switchTab('parceiro'));
+        document.getElementById('tab-vendidas').addEventListener('click', () => switchTab('vendida'));
 
         // Rolagem e ativação da aba de parceiros ao clicar nos links
         const handleParceirosClick = (e) => {
@@ -677,8 +668,7 @@
         const menuLinkParceiros = document.getElementById('menu-link-parceiros');
         if (menuLinkParceiros) menuLinkParceiros.addEventListener('click', handleParceirosClick);
 
-        const ctaParceiros = document.getElementById('cta-parceiros');
-        if (ctaParceiros) ctaParceiros.addEventListener('click', handleParceirosClick);
+
 
         // ── LÓGICA DE ABRIR E FECHAR O MODAL DE DETALHES ────────────────
         function openDetailsModal(id) {
