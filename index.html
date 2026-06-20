@@ -343,7 +343,11 @@
                 <div>
                     <span class="text-gray-400 text-[10px]">Raid: Shadow Legends é uma marca registada da Plarium Global Ltd.</span>
                 </div>
+            </div>
+        </div>
+    </footer>
     <script>
+        console.log("Mamako Loko Shop script block executing...");
         let rawAccountsData = [];
         let accountsData = []; // Estoque filtrado exibido atualmente
         let activeTab = 'propria'; // 'propria' ou 'parceiro'
@@ -365,19 +369,25 @@
 
         // Carregar dados do Google Sheets
         async function fetchSheetData() {
+            console.log("fetchSheetData started. URL:", googleSheetCsvUrl);
             try {
                 const response = await fetch(googleSheetCsvUrl);
+                console.log("Fetch response received. Status:", response.status);
                 const csvText = await response.text();
+                console.log("CSV text length:", csvText.length);
 
                 Papa.parse(csvText, {
                     header: true,
                     skipEmptyLines: true,
                     complete: function (results) {
+                        console.log("Papa.parse complete. Data length:", results.data ? results.data.length : 0);
                         // Mapeia todas as linhas usando a função centralizada do api.js
                         rawAccountsData = results.data.map(mapRow);
+                        console.log("Mapped rawAccountsData. Length:", rawAccountsData.length);
                         
                         // Atualiza os contadores das abas
                         updateTabCounters();
+                        console.log("Tab counters updated.");
 
                         // Oculta o loading e exibe os cartões
                         document.getElementById('loading').classList.add('hidden');
@@ -385,6 +395,7 @@
                         
                         // Checar se há deep-linking por ID na URL
                         const urlId = getUrlParameter('id');
+                        console.log("URL ID parameter:", urlId);
                         if (urlId) {
                             const targetAcc = rawAccountsData.find(a => a.id === urlId);
                             if (targetAcc) {
@@ -395,10 +406,12 @@
                         }
 
                         // Aplica o filtro inicial e renderiza
+                        console.log("Switching tab to:", activeTab);
                         switchTab(activeTab);
 
                         // Abre o modal se tiver id na URL
                         if (urlId) {
+                            console.log("Opening details modal for URL ID:", urlId);
                             openDetailsModal(urlId);
                         }
                     },
@@ -828,97 +841,133 @@
             closeLightbox();
         }
 
-        document.getElementById('modalClose').addEventListener('click', closeDetailsModal);
-        
-        // Fecha se clicar fora do container do modal
-        document.getElementById('detailsModal').addEventListener('click', e => {
-            if (e.target === document.getElementById('detailsModal')) closeDetailsModal();
-        });
+        function init() {
+            // Inicializar variáveis do DOM que são declaradas após o script
+            lb = document.getElementById('lightbox');
+            lbImg = document.getElementById('lbImg');
+            lbWrap = document.getElementById('lbWrap');
+            lbCount = document.getElementById('lbCounter');
+
+            // Eventos do modal de detalhes
+            const modalClose = document.getElementById('modalClose');
+            if (modalClose) modalClose.addEventListener('click', closeDetailsModal);
+            
+            const detailsModal = document.getElementById('detailsModal');
+            if (detailsModal) {
+                detailsModal.addEventListener('click', e => {
+                    if (e.target === detailsModal) closeDetailsModal();
+                });
+            }
+
+            // Eventos do Lightbox
+            const lbClose = document.getElementById('lbClose');
+            if (lbClose) lbClose.addEventListener('click', closeLightbox);
+
+            const lbPrev = document.getElementById('lbPrev');
+            if (lbPrev) lbPrev.addEventListener('click', prevImage);
+
+            const lbNext = document.getElementById('lbNext');
+            if (lbNext) lbNext.addEventListener('click', nextImage);
+
+            const lbPrev2 = document.getElementById('lbPrev2');
+            if (lbPrev2) lbPrev2.addEventListener('click', prevImage);
+
+            const lbNext2 = document.getElementById('lbNext2');
+            if (lbNext2) lbNext2.addEventListener('click', nextImage);
+
+            if (lb) {
+                lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+
+                lb.addEventListener('touchstart', e => { if (e.touches.length === 1) touchStartX = e.changedTouches[0].clientX; });
+                lb.addEventListener('touchend', e => {
+                    if (scale > 1 || e.changedTouches.length !== 1) return;
+                    const diff = touchStartX - e.changedTouches[0].clientX;
+                    if (Math.abs(diff) > 50) diff > 0 ? nextImage() : prevImage();
+                });
+            }
+
+            if (lbWrap) {
+                lbWrap.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    let newScale = scale + (Math.sign(e.deltaY) * -0.15 * scale);
+                    scale = Math.min(5, Math.max(1, newScale));
+                    if (scale === 1) { translateX = 0; translateY = 0; }
+                    applyTransform();
+                }, { passive: false });
+
+                lbWrap.addEventListener('pointerdown', (e) => {
+                    if (scale > 1) { isDragging = true; lbWrap.classList.add('no-transition'); startX = e.clientX - translateX; startY = e.clientY - translateY; }
+                });
+
+                lbWrap.addEventListener('touchstart', (e) => {
+                    if (e.touches.length === 2) { e.preventDefault(); isDragging = false; initialDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); initialScale = scale; }
+                }, { passive: false });
+
+                lbWrap.addEventListener('touchmove', (e) => {
+                    if (e.touches.length === 2) {
+                        e.preventDefault();
+                        const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+                        scale = Math.min(5, Math.max(1, initialScale * (d / initialDistance)));
+                        if (scale === 1) { translateX = 0; translateY = 0; }
+                        applyTransform();
+                    }
+                }, { passive: false });
+            }
+
+            window.addEventListener('pointermove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                translateX = e.clientX - startX;
+                translateY = e.clientY - startY;
+                applyTransform();
+            });
+            window.addEventListener('pointerup', () => { isDragging = false; if (lbWrap) lbWrap.classList.remove('no-transition'); });
+
+            document.addEventListener('keydown', e => {
+                if (lb && lb.classList.contains('hidden')) return;
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowLeft') prevImage();
+                if (e.key === 'ArrowRight') nextImage();
+            });
+
+            // Chamar fetchSheetData imediatamente após carregar o DOM
+            fetchSheetData();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
 
         // ── LIGHTBOX LOGIC ─────────────────────────────────────────────
-        const lb    = document.getElementById('lightbox');
-        const lbImg = document.getElementById('lbImg');
-        const lbWrap  = document.getElementById('lbWrap');
-        const lbCount = document.getElementById('lbCounter');
+        let lb, lbImg, lbWrap, lbCount;
 
         function openLightbox(i) {
             currentImageIndex = i;
             resetZoom();
             updateLightbox();
-            lb.classList.remove('hidden');
-            lb.classList.add('flex');
+            if (lb) {
+                lb.classList.remove('hidden');
+                lb.classList.add('flex');
+            }
         }
         function closeLightbox() {
-            lb.classList.add('hidden');
-            lb.classList.remove('flex');
+            if (lb) {
+                lb.classList.add('hidden');
+                lb.classList.remove('flex');
+            }
             resetZoom();
         }
         function updateLightbox() {
-            lbImg.src = images[currentImageIndex];
-            lbCount.textContent = `${currentImageIndex + 1} / ${images.length}`;
+            if (lbImg) lbImg.src = images[currentImageIndex];
+            if (lbCount) lbCount.textContent = `${currentImageIndex + 1} / ${images.length}`;
         }
         function prevImage() { currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; resetZoom(); updateLightbox(); }
         function nextImage() { currentImageIndex = (currentImageIndex + 1) % images.length; resetZoom(); updateLightbox(); }
 
         function resetZoom() { scale = 1; translateX = 0; translateY = 0; applyTransform(); }
-        function applyTransform() { lbImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`; }
-
-        lbWrap.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            let newScale = scale + (Math.sign(e.deltaY) * -0.15 * scale);
-            scale = Math.min(5, Math.max(1, newScale));
-            if (scale === 1) { translateX = 0; translateY = 0; }
-            applyTransform();
-        }, { passive: false });
-
-        lbWrap.addEventListener('pointerdown', (e) => {
-            if (scale > 1) { isDragging = true; lbWrap.classList.add('no-transition'); startX = e.clientX - translateX; startY = e.clientY - translateY; }
-        });
-        window.addEventListener('pointermove', (e) => {
-            if (!isDragging) return;
-            e.preventDefault();
-            translateX = e.clientX - startX;
-            translateY = e.clientY - startY;
-            applyTransform();
-        });
-        window.addEventListener('pointerup', () => { isDragging = false; lbWrap.classList.remove('no-transition'); });
-
-        lbWrap.addEventListener('touchstart', (e) => {
-            if (e.touches.length === 2) { e.preventDefault(); isDragging = false; initialDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); initialScale = scale; }
-        }, { passive: false });
-        lbWrap.addEventListener('touchmove', (e) => {
-            if (e.touches.length === 2) {
-                e.preventDefault();
-                const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-                scale = Math.min(5, Math.max(1, initialScale * (d / initialDistance)));
-                if (scale === 1) { translateX = 0; translateY = 0; }
-                applyTransform();
-            }
-        }, { passive: false });
-
-        // Eventos do Lightbox
-        document.getElementById('lbClose').addEventListener('click', closeLightbox);
-        document.getElementById('lbPrev').addEventListener('click', prevImage);
-        document.getElementById('lbNext').addEventListener('click', nextImage);
-        document.getElementById('lbPrev2').addEventListener('click', prevImage);
-        document.getElementById('lbNext2').addEventListener('click', nextImage);
-        lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
-        document.addEventListener('keydown', e => {
-            if (lb.classList.contains('hidden')) return;
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowLeft') prevImage();
-            if (e.key === 'ArrowRight') nextImage();
-        });
-
-        let touchStartX = 0;
-        lb.addEventListener('touchstart', e => { if (e.touches.length === 1) touchStartX = e.changedTouches[0].clientX; });
-        lb.addEventListener('touchend', e => {
-            if (scale > 1 || e.changedTouches.length !== 1) return;
-            const diff = touchStartX - e.changedTouches[0].clientX;
-            if (Math.abs(diff) > 50) diff > 0 ? nextImage() : prevImage();
-        });
-
-        window.onload = fetchSheetData;
+        function applyTransform() { if (lbImg) lbImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`; }
     </script>
 
     <!-- MODAL DE DETALHES DA CONTA -->
