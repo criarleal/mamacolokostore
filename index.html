@@ -14,6 +14,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="api.js"></script>
 
     <script>
         tailwind.config = {
@@ -63,27 +64,25 @@
             <div class="flex items-center justify-between h-20">
                 <div class="flex items-center space-x-3">
                     <div class="w-12 h-12 rounded-full overflow-hidden shadow-lg shadow-brand-orange/20">
-                        <a href="/mamakoshop"><img src="logo.png" alt="Mamako Loko"
-                                class="w-full h-full object-cover"></a>
+                        <a href="/mamakoshop"><img src="logo.png"
+                            alt="Mamako Loko" class="w-full h-full object-cover"></a>
                     </div>
                     <div>
                         <a href="/mamakoshop"><span
-                                class="font-cinzel font-black text-xl tracking-wider bg-gradient-to-r from-brand-gold via-brand-orange to-red-500 bg-clip-text text-transparent">MAMAKO
-                                LOKO</span>
-                            <p class="text-[10px] text-gray-400 uppercase tracking-widest -mt-1">Raid Store</p>
-                        </a>
+                            class="font-cinzel font-black text-xl tracking-wider bg-gradient-to-r from-brand-gold via-brand-orange to-red-500 bg-clip-text text-transparent">MAMAKO
+                            LOKO</span>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-widest -mt-1">Raid Store</p></a>
                     </div>
                 </div>
 
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#catalogo"
                         class="text-gray-300 hover:text-brand-gold transition-colors font-medium">Catálogo</a>
-                    <a href="parceiros.html"
+                    <a href="#catalogo" id="nav-parceiros"
                         class="text-gray-300 hover:text-brand-gold transition-colors font-medium flex items-center space-x-1">
                         <i class="fas fa-handshake text-brand-orange text-xs mr-1"></i>Parceiros
                     </a>
-                    <a href="#faq" class="text-gray-300 hover:text-brand-gold transition-colors font-medium">Como
-                        Funciona</a>
+                    <a href="#faq" class="text-gray-300 hover:text-brand-gold transition-colors font-medium">Como Funciona</a>
 
                     <div class="flex bg-neutral-900 border border-neutral-800 rounded-full p-1 text-sm font-semibold">
                         <button id="btn-brl"
@@ -113,13 +112,12 @@
             class="hidden md:hidden bg-brand-card border-b border-neutral-800 px-4 pt-2 pb-6 space-y-4">
             <a href="#catalogo" id="menu-link-catalogo"
                 class="block text-gray-300 hover:text-brand-gold font-semibold py-2 border-b border-neutral-900">Catálogo</a>
-            <a href="parceiros.html"
+            <a href="#catalogo" id="menu-link-parceiros"
                 class="block text-gray-300 hover:text-brand-gold font-semibold py-2 border-b border-neutral-900 flex items-center">
                 <i class="fas fa-handshake text-brand-orange mr-2"></i>Contas de Parceiros
             </a>
             <a href="#faq" id="menu-link-faq"
-                class="block text-gray-300 hover:text-brand-gold font-semibold py-2 border-b border-neutral-900">Como
-                Funciona</a>
+                class="block text-gray-300 hover:text-brand-gold font-semibold py-2 border-b border-neutral-900">Como Funciona</a>
 
             <div class="flex items-center justify-between pt-2">
                 <span class="text-xs text-gray-400 uppercase tracking-widest font-semibold">Moeda de Exibição:</span>
@@ -203,11 +201,20 @@
     <section id="catalogo" class="py-16 bg-brand-dark">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto mb-12">
-                <h2 class="font-cinzel font-black text-2xl sm:text-3xl text-white tracking-wider">ESTOQUE ATUALIZADO
-                </h2>
+                <h2 class="font-cinzel font-black text-2xl sm:text-3xl text-white tracking-wider">ESTOQUE ATUALIZADO</h2>
                 <div class="h-1 w-20 bg-brand-orange mx-auto my-3 rounded-full"></div>
                 <p class="text-gray-400 text-sm">Contas premium e exclusivas com envio imediato. Toque na conta
                     pretendida para fechar negócio diretamente através do WhatsApp.</p>
+            </div>
+
+            <!-- Seletor de Abas (Estoque Oficial / Vendedores Parceiros) -->
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12 max-w-md mx-auto">
+                <button id="tab-propria" class="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold font-cinzel text-xs tracking-wider transition-all duration-300 border border-brand-orange/40 bg-gradient-to-r from-brand-orange to-red-600 text-white shadow-lg shadow-brand-orange/15 hover:scale-105">
+                    Estoque Oficial <span id="count-propria" class="ml-1.5 text-[10px] bg-black/35 px-2 py-0.5 rounded-full text-brand-gold font-sans font-semibold">...</span>
+                </button>
+                <button id="tab-parceiros" class="w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold font-cinzel text-xs tracking-wider transition-all duration-300 border border-neutral-800 bg-neutral-900/60 text-gray-400 hover:text-white hover:border-neutral-700 hover:scale-105">
+                    Contas de Parceiros <span id="count-parceiros" class="ml-1.5 text-[10px] bg-black/35 px-2 py-0.5 rounded-full text-gray-400 font-sans font-semibold">...</span>
+                </button>
             </div>
 
             <div id="loading" class="text-center py-12">
@@ -216,7 +223,7 @@
             </div>
 
             <div id="accountsContainer" class="grid md:grid-cols-2 gap-8 hidden">
-            </div>
+                </div>
         </div>
     </section>
 
@@ -240,8 +247,7 @@
                             class="p-5 border-t border-neutral-800/60 text-xs sm:text-sm text-gray-400 leading-relaxed bg-neutral-950/45">
                             A entrega é feita de forma prática através do WhatsApp. Enviamos as credenciais necessárias
                             (Plarium ID ou e-mail atual da conta e palavra-passe). Prestamos suporte passo a passo para
-                            a vinculação do seu próprio e-mail e alteração da palavra-passe para garantir segurança
-                            total.
+                            a vinculação do seu próprio e-mail e alteração da palavra-passe para garantir segurança total.
                         </div>
                     </div>
                 </div>
@@ -274,8 +280,7 @@
                         <div
                             class="p-5 border-t border-neutral-800/60 text-xs sm:text-sm text-gray-400 leading-relaxed bg-neutral-950/45">
                             A Mamako Loko Shop possuí diversas referências em vendas de contas pelos grupos de Raid BR
-                            através do seu criador Sergio Galdino. Todas as contas são validadas antes da venda e
-                            oferecemos suporte total pós-compra.
+                            através do seu criador Sergio Galdino. Todas as contas são validadas antes da venda e oferecemos suporte total pós-compra.
                         </div>
                     </div>
                 </div>
@@ -285,32 +290,25 @@
 
     <section class="py-12 bg-gradient-to-b from-brand-dark to-neutral-950 border-t border-neutral-900">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div
-                class="relative bg-gradient-to-r from-neutral-900 via-brand-card to-neutral-900 border border-neutral-800 p-8 sm:p-10 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 group hover:border-brand-orange/40 transition-all duration-300">
-                <div
-                    class="absolute -right-16 -bottom-16 w-44 h-44 bg-brand-orange/10 rounded-full blur-3xl group-hover:bg-brand-orange/20 transition-all duration-500">
-                </div>
-
+            <div class="relative bg-gradient-to-r from-neutral-900 via-brand-card to-neutral-900 border border-neutral-800 p-8 sm:p-10 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 group hover:border-brand-orange/40 transition-all duration-300">
+                <div class="absolute -right-16 -bottom-16 w-44 h-44 bg-brand-orange/10 rounded-full blur-3xl group-hover:bg-brand-orange/20 transition-all duration-500"></div>
+                
                 <div class="space-y-3 text-center md:text-left z-10">
-                    <span
-                        class="bg-brand-orange/10 border border-brand-orange/30 text-brand-gold text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full">
+                    <span class="bg-brand-orange/10 border border-brand-orange/30 text-brand-gold text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full">
                         Estoque Cooperativo
                     </span>
                     <h3 class="font-cinzel text-xl sm:text-2xl font-black text-white tracking-wide">
                         Procurando mais opções?<br>
-                        <span
-                            class="bg-gradient-to-r from-brand-gold to-brand-orange bg-clip-text text-transparent">Explore
-                            as contas dos nossos parceiros</span>
+                        <span class="bg-gradient-to-r from-brand-gold to-brand-orange bg-clip-text text-transparent">Explore as contas dos nossos parceiros</span>
                     </h3>
                     <p class="text-xs text-gray-400 max-w-md leading-relaxed">
-                        Trabalhamos com fornecedores e jogadores selecionados para trazer ainda mais diversidade ao
-                        catálogo. Segurança total garantida e intermediada por nós!
+                        Trabalhamos com fornecedores e jogadores selecionados para trazer ainda mais diversidade ao catálogo. Segurança total garantida e intermediada por nós!
                     </p>
                 </div>
 
                 <div class="w-full md:w-auto text-center z-10 shrink-0">
-                    <a href="parceiros.html"
-                        class="inline-flex items-center space-x-2 bg-gradient-to-r from-brand-orange to-red-600 hover:scale-105 text-white text-sm font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-brand-orange/20 transition-all duration-200 w-full sm:w-auto justify-center">
+                    <a href="#catalogo" id="cta-parceiros"
+                       class="inline-flex items-center space-x-2 bg-gradient-to-r from-brand-orange to-red-600 hover:scale-105 text-white text-sm font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-brand-orange/20 transition-all duration-200 w-full sm:w-auto justify-center">
                         <span>Ver Contas Parceiros</span>
                         <i class="fas fa-arrow-right text-xs"></i>
                     </a>
@@ -332,7 +330,8 @@
             <a href="https://api.whatsapp.com/send?phone=5561993935402&text=Olá Mamako! Vi o catálogo e quero negociar uma conta."
                 target="_blank"
                 class="block max-w-4xl mx-auto rounded-3xl overflow-hidden shadow-2xl hover:scale-[1.02] hover:shadow-brand-orange/20 transition-all duration-300">
-                <img src="whatsapp.png" alt="Fale com o Mamako no WhatsApp" class="w-full h-auto block">
+                <img src="whatsapp.png"
+                    alt="Fale com o Mamako no WhatsApp" class="w-full h-auto block">
             </a>
 
             <div
@@ -342,20 +341,29 @@
                     <span>&copy; 2026. Todos os direitos reservados.</span>
                 </div>
                 <div>
-                    <span class="text-gray-400 text-[10px]">Raid: Shadow Legends é uma marca registada da Plarium Global
-                        Ltd.</span>
+                    <span class="text-gray-400 text-[10px]">Raid: Shadow Legends é uma marca registada da Plarium Global Ltd.</span>
                 </div>
-            </div>
-        </div>
-    </footer>
-
     <script>
-        const googleSheetCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSGMz9XAk5spv5FFN585VM6g6toC79iulNUFqYB76MQmRTuhjnyTjRSybOuyhZ5FImNompOX0eFjZI0/pub?output=csv";
-
-        let accountsData = [];
+        let rawAccountsData = [];
+        let accountsData = []; // Estoque filtrado exibido atualmente
+        let activeTab = 'propria'; // 'propria' ou 'parceiro'
         let currentCurrency = 'BRL';
 
-        // Carregar dados do Google Sheets filtrando por 'propria'
+        // ── VARIÁVEIS DO MODAL E LIGHTBOX ──────────────────────────────
+        let currentModalAccount = null;
+        let images = [];
+        let currentImageIndex = 0;
+        let scale = 1, isDragging = false;
+        let startX, startY, translateX = 0, translateY = 0;
+        let initialDistance = null, initialScale = 1;
+
+        // Função para obter parâmetros da URL (Deep-linking)
+        function getUrlParameter(name) {
+            const results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
+            return results ? decodeURIComponent(results[1]) : null;
+        }
+
+        // Carregar dados do Google Sheets
         async function fetchSheetData() {
             try {
                 const response = await fetch(googleSheetCsvUrl);
@@ -365,28 +373,34 @@
                     header: true,
                     skipEmptyLines: true,
                     complete: function (results) {
-                        // FILTRO INVERSO: Só exibe se tipo for 'propria' (ou caso esteja em branco, assumindo como sua)
-                        const apenasMinhas = results.data.filter(row => {
-                            const tipoConta = row.tipo ? row.tipo.trim().toLowerCase() : '';
-                            return tipoConta === 'propria' || tipoConta === '';
-                        });
+                        // Mapeia todas as linhas usando a função centralizada do api.js
+                        rawAccountsData = results.data.map(mapRow);
+                        
+                        // Atualiza os contadores das abas
+                        updateTabCounters();
 
-                        accountsData = apenasMinhas.map(row => ({
-                            id: row.id ? row.id.trim() : '',
-                            title: row.title ? row.title.trim() : '',
-                            power: row.power ? row.power.trim() : '',
-                            tagline: row.tagline ? row.tagline.trim() : '',
-                            image: row.image ? row.image.trim() : '',
-                            priceBrl: parseFloat(row.priceBrl) || 0,
-                            priceUsd: parseFloat(row.priceUsd) || 0,
-                            label: row.label ? row.label.trim() : '',
-                            status: row.status ? row.status.trim().toUpperCase() : 'DISPONÍVEL',
-                            recursos: row.recursos ? row.recursos.trim() : ''
-                        }));
-
+                        // Oculta o loading e exibe os cartões
                         document.getElementById('loading').classList.add('hidden');
                         document.getElementById('accountsContainer').classList.remove('hidden');
-                        renderAccounts();
+                        
+                        // Checar se há deep-linking por ID na URL
+                        const urlId = getUrlParameter('id');
+                        if (urlId) {
+                            const targetAcc = rawAccountsData.find(a => a.id === urlId);
+                            if (targetAcc) {
+                                if (targetAcc.tipo === 'parceiro') {
+                                    activeTab = 'parceiro';
+                                }
+                            }
+                        }
+
+                        // Aplica o filtro inicial e renderiza
+                        switchTab(activeTab);
+
+                        // Abre o modal se tiver id na URL
+                        if (urlId) {
+                            openDetailsModal(urlId);
+                        }
                     },
                     error: function (err) {
                         console.error("Erro ao processar o CSV: ", err);
@@ -400,7 +414,7 @@
         }
 
         function fallbackToDefault() {
-            accountsData = [
+            rawAccountsData = [
                 {
                     id: "001",
                     title: "Conta Void Premium",
@@ -410,11 +424,51 @@
                     priceBrl: 1000,
                     priceUsd: 200,
                     label: "Cód: 001",
-                    status: "DISPONÍVEL"
+                    status: "DISPONÍVEL",
+                    tipo: "propria"
                 }
             ];
+            updateTabCounters();
             document.getElementById('loading').classList.add('hidden');
             document.getElementById('accountsContainer').classList.remove('hidden');
+            switchTab('propria');
+        }
+
+        function updateTabCounters() {
+            const countPropria = rawAccountsData.filter(acc => acc.tipo === 'propria' || acc.tipo === '').length;
+            const countParceiros = rawAccountsData.filter(acc => acc.tipo === 'parceiro').length;
+
+            document.getElementById('count-propria').textContent = countPropria;
+            document.getElementById('count-parceiros').textContent = countParceiros;
+        }
+
+        // Função para alterar abas
+        function switchTab(tab) {
+            activeTab = tab;
+            const tabPropria = document.getElementById('tab-propria');
+            const tabParceiros = document.getElementById('tab-parceiros');
+
+            const activeClasses = ['bg-gradient-to-r', 'from-brand-orange', 'to-red-600', 'text-white', 'border-brand-orange/40', 'shadow-lg', 'shadow-brand-orange/15'];
+            const inactiveClasses = ['bg-neutral-900/60', 'text-gray-400', 'border-neutral-800', 'hover:text-white', 'hover:border-neutral-700'];
+
+            if (tab === 'propria') {
+                tabPropria.className = "w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold font-cinzel text-xs tracking-wider transition-all duration-300 border hover:scale-105";
+                tabPropria.classList.add(...activeClasses);
+                tabParceiros.className = "w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold font-cinzel text-xs tracking-wider transition-all duration-300 border hover:scale-105";
+                tabParceiros.classList.add(...inactiveClasses);
+                
+                // Filtrar para próprias
+                accountsData = rawAccountsData.filter(acc => acc.tipo === 'propria' || acc.tipo === '');
+            } else {
+                tabParceiros.className = "w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold font-cinzel text-xs tracking-wider transition-all duration-300 border hover:scale-105";
+                tabParceiros.classList.add(...activeClasses);
+                tabPropria.className = "w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold font-cinzel text-xs tracking-wider transition-all duration-300 border hover:scale-105";
+                tabPropria.classList.add(...inactiveClasses);
+                
+                // Filtrar para parceiros
+                accountsData = rawAccountsData.filter(acc => acc.tipo === 'parceiro');
+            }
+
             renderAccounts();
         }
 
@@ -470,48 +524,107 @@
             const container = document.getElementById('accountsContainer');
             container.innerHTML = '';
 
-            // 1. ORDENAÇÃO: Coloca os itens com 'PROMO' no topo
-            // Consideramos que o campo na planilha se chama 'promo_code' (ajuste se for outro)
-            const sortedAccounts = [...accountsData].sort((a, b) => {
-                const aPromo = a.promo_code && a.promo_code.trim().toUpperCase() === 'PROMO';
-                const bPromo = b.promo_code && b.promo_code.trim().toUpperCase() === 'PROMO';
+            accountsData.forEach(acc => {
+                const priceFormatted = currentCurrency === 'BRL'
+                    ? `R$ ${acc.priceBrl.toLocaleString('pt-BR')}`
+                    : `US$ ${acc.priceUsd.toLocaleString('en-US')}`;
 
-                if (aPromo && !bPromo) return -1; // 'a' vem antes
-                if (!aPromo && bPromo) return 1;  // 'b' vem antes
-                return 0; // mantém a ordem
-            });
+                const printsLink = `javascript:openDetailsModal('${acc.id}')`;
 
-            // 2. RENDERIZAÇÃO
-            sortedAccounts.forEach(acc => {
-                const isSold = acc.status === 'VENDIDA';
+                // Determina o número de WhatsApp e nome do vendedor
+                let numWhats = whatsappPadrao;
+                let nomeVendedor = vendedorPadrao;
 
-                // Lógica do Selo: Verifica se é promo
-                const isPromo = acc.promo_code && acc.promo_code.trim().toUpperCase() === 'PROMO';
-                const seloHtml = isPromo
-                    ? `<div class="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg z-10">PROMOÇÃO</div>`
+                if (acc.tipo === 'parceiro') {
+                    if (acc.whatsapp && acc.whatsapp.trim() !== '') {
+                        numWhats = acc.whatsapp.replace(/\D/g, "");
+                        if (numWhats.length === 11 || numWhats.length === 10) {
+                            numWhats = "55" + numWhats;
+                        }
+                    }
+                    if (acc.vendedor && acc.vendedor.trim() !== '') {
+                        nomeVendedor = acc.vendedor.trim();
+                    }
+                }
+
+                const encodedMessage = encodeURIComponent(
+                    acc.tipo === 'parceiro'
+                        ? `Olá! Vi o anúncio da conta [Código ${acc.id}] na página de parceiros do Mamako Loko e gostaria de negociar.`
+                        : `Olá Mamako! Gostaria de fechar negócio na conta [Código ${acc.id}] - ${acc.title} (${acc.tagline}) no valor de ${priceFormatted}. Ainda está disponível?`
+                );
+                const whatsappLink = `https://api.whatsapp.com/send?phone=${numWhats}&text=${encodedMessage}`;
+
+                const isSold = acc.status === 'VENDIDO';
+                const statusBadge = isSold
+                    ? `<span class="bg-red-500/15 border border-red-500/30 text-red-400 text-[10px] font-bold px-2.5 py-1 rounded">VENDIDO</span>`
+                    : `<span class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded">DISPONÍVEL</span>`;
+
+                const clickAction = isSold ? '#' : whatsappLink;
+
+                // Selo do vendedor parceiro se aplicável
+                const sellerBadge = acc.tipo === 'parceiro' && acc.vendedor
+                    ? `<span class="absolute top-3 left-3 bg-black/60 border border-neutral-700 text-gray-300 text-[10px] font-semibold px-3 py-1 rounded-full shadow-lg z-20 backdrop-blur-sm">
+                           <i class="fas fa-user text-brand-orange mr-1"></i>Vendedor: ${acc.vendedor}
+                       </span>`
                     : '';
 
                 const card = `
-            <div class="relative bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden hover:border-neutral-700 transition-all">
-                ${seloHtml} <img src="${acc.image}" alt="${acc.title}" class="w-full h-48 object-cover">
-                <div class="p-5">
-                    <h3 class="text-xl font-cinzel font-bold text-white mb-2">${acc.title}</h3>
-                    <p class="text-neutral-400 text-sm mb-4">${acc.tagline || ''}</p>
-                    
-                    <div class="flex items-center justify-between mb-6">
-                        <span class="text-brand-gold font-bold text-lg">
-                            ${currentCurrency === 'BRL' ? 'R$ ' + acc.priceBrl : 'US$ ' + acc.priceUsd}
-                        </span>
-                    </div>
+                    <div class="bg-brand-card border border-neutral-800/80 rounded-2xl overflow-hidden shadow-xl hover:scale-[1.02] hover:border-brand-orange/40 transition-all duration-300 flex flex-col justify-between group ${isSold ? 'opacity-65 grayscale' : ''}">
+                        
+                        <div class="relative h-72 flex items-center justify-center overflow-hidden border-b border-neutral-900 bg-black">
+                            <img src="${acc.image}" alt="${acc.title}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent z-10"></div>
+                            
+                            ${(acc.label === 'Sim' || acc.label === 'Promoção')
+                                ? `<img src="promo.png" alt="Promoção" class="absolute top-3 right-3 w-36 z-20 drop-shadow-2xl hover:scale-110 transition-transform duration-300">`
+                                : ''
+                            }
+                            ${sellerBadge}
+                        </div>
 
-                    <a href="${isSold ? '#' : acc.whatsapp}" 
-                       class="block text-center w-full ${isSold ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed' : 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white'} font-bold py-3 px-4 rounded-xl transition-all shadow-md">
-                        <i class="${isSold ? 'fas fa-ban' : 'fab fa-whatsapp'} mr-2"></i>
-                        ${isSold ? 'Vendida' : 'Comprar via WhatsApp'}
-                    </a>
-                </div>
-            </div>
-        `;
+                        <div class="p-6 space-y-5 flex-1 flex flex-col justify-between bg-[#0e0e11]">
+                            <div class="space-y-4">
+                                <div class="space-y-1">
+                                    <h3 class="font-cinzel text-brand-gold font-black text-lg tracking-wide uppercase transition-colors group-hover:text-white">${acc.title}</h3>
+                                    <p class="text-gray-400 text-xs font-semibold">${acc.tagline}</p>
+                                </div>
+
+                                <div class="flex items-center justify-between text-xs bg-black/60 p-2.5 rounded-lg border border-neutral-900">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-chart-line text-brand-orange"></i>
+                                        <span class="text-gray-400">Poder de Conta:</span>
+                                    </div>
+                                    <span class="font-bold text-white font-mono">${acc.power}</span>
+                                </div>
+
+                                <a href="${printsLink}" 
+                                   class="w-full inline-flex items-center justify-center space-x-2 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800/80 hover:border-brand-orange/30 text-gray-300 hover:text-white text-xs font-bold py-2.5 px-4 rounded-xl transition-all shadow-sm">
+                                    <i class="fas fa-images text-brand-orange"></i>
+                                    <span>Veja todos os prints</span>
+                                </a>
+                            </div>
+
+                            <div class="pt-5 border-t border-neutral-900 mt-2">
+                                <div class="flex items-end justify-between mb-4">
+                                    <div>
+                                        <p class="text-[9px] text-gray-500 uppercase tracking-widest font-semibold">Valor do Investimento</p>
+                                        <p class="text-2xl font-black text-white font-cinzel mt-0.5">${priceFormatted}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        ${statusBadge}
+                                    </div>
+                                </div>
+
+                                <a href="${clickAction}" 
+                                   target="${isSold ? '' : '_blank'}"
+                                   class="w-full inline-flex items-center justify-center space-x-2 bg-gradient-to-r ${isSold ? 'from-neutral-700 to-neutral-800 cursor-not-allowed' : 'from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500'} text-white font-bold py-3.5 px-4 rounded-xl transition-all shadow-md active:scale-95 duration-200">
+                                    <i class="${isSold ? 'fas fa-ban' : 'fab fa-whatsapp'} text-base"></i>
+                                    <span>${isSold ? 'Vendida' : (acc.tipo === 'parceiro' ? `Comprar com ${nomeVendedor}` : 'Comprar via WhatsApp')}</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
                 container.innerHTML += card;
             });
         }
@@ -533,8 +646,376 @@
             });
         });
 
+        // Eventos das abas do catálogo
+        document.getElementById('tab-propria').addEventListener('click', () => switchTab('propria'));
+        document.getElementById('tab-parceiros').addEventListener('click', () => switchTab('parceiro'));
+
+        // Rolagem e ativação da aba de parceiros ao clicar nos links
+        const handleParceirosClick = (e) => {
+            e.preventDefault();
+            switchTab('parceiro');
+            document.getElementById('catalogo').scrollIntoView({ behavior: 'smooth' });
+            mobileMenu.classList.add('hidden');
+        };
+
+        const navParceiros = document.getElementById('nav-parceiros');
+        if (navParceiros) navParceiros.addEventListener('click', handleParceirosClick);
+
+        const menuLinkParceiros = document.getElementById('menu-link-parceiros');
+        if (menuLinkParceiros) menuLinkParceiros.addEventListener('click', handleParceirosClick);
+
+        const ctaParceiros = document.getElementById('cta-parceiros');
+        if (ctaParceiros) ctaParceiros.addEventListener('click', handleParceirosClick);
+
+        // ── LÓGICA DE ABRIR E FECHAR O MODAL DE DETALHES ────────────────
+        function openDetailsModal(id) {
+            const acc = rawAccountsData.find(a => a.id === id);
+            if (!acc) return;
+
+            currentModalAccount = acc;
+            images = acc.prints || [];
+            currentImageIndex = 0;
+
+            // Atualiza dados no Modal
+            document.getElementById('modalCodeHeader').textContent = `Código: ${acc.id}`;
+            document.getElementById('modalTitle').textContent = acc.title;
+
+            // Formatação de Preço
+            const priceFormatted = currentCurrency === 'BRL'
+                ? `R$ ${acc.priceBrl.toLocaleString('pt-BR')}`
+                : `US$ ${acc.priceUsd.toLocaleString('en-US')}`;
+            document.getElementById('modalPriceLabel').textContent = priceFormatted;
+
+            // Status Badge do Modal
+            const isSold = acc.status === 'VENDIDO';
+            const badge = document.getElementById('modalAvailabilityBadge');
+            const ctaBtn = document.getElementById('modalBuyCtaBtn');
+
+            if (isSold) {
+                badge.className = "bg-red-500/15 border border-red-500/30 text-red-400 text-[10px] font-bold px-2.5 py-1 rounded";
+                badge.textContent = "VENDIDO";
+                ctaBtn.className = "w-full inline-flex items-center justify-center space-x-2 bg-neutral-700 text-white font-bold py-4 px-4 rounded-xl cursor-not-allowed";
+                ctaBtn.innerHTML = `<i class="fas fa-ban"></i> <span>Vendida</span>`;
+                ctaBtn.href = "#";
+            } else {
+                badge.className = "bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded";
+                badge.textContent = "DISPONÍVEL";
+                
+                // Lógica de Direcionamento do WhatsApp do modal
+                let numWhats = whatsappPadrao;
+                let nomeVendedor = vendedorPadrao;
+
+                if (acc.tipo === 'parceiro') {
+                    if (acc.whatsapp && acc.whatsapp.trim() !== "") {
+                        numWhats = acc.whatsapp.replace(/\D/g, "");
+                        if (numWhats.length === 11 || numWhats.length === 10) {
+                            numWhats = "55" + numWhats;
+                        }
+                    }
+                    if (acc.vendedor && acc.vendedor.trim() !== "") {
+                        nomeVendedor = acc.vendedor.trim();
+                    }
+                }
+
+                const msg = encodeURIComponent(
+                    acc.tipo === 'parceiro'
+                        ? `Olá! Vi o anúncio da conta [Código ${acc.id}] na página de parceiros do Mamako Loko e gostaria de negociar.`
+                        : `Olá Mamako! Gostaria de fechar negócio na conta [Código ${acc.id}] - ${acc.title} (${acc.tagline}) no valor de ${priceFormatted}. Ainda está disponível?`
+                );
+                ctaBtn.className = "w-full inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-4 px-4 rounded-xl transition-all shadow-md active:scale-95 duration-200";
+                ctaBtn.innerHTML = `<i class="fab fa-whatsapp text-lg"></i> <span>${acc.tipo === 'parceiro' ? 'Comprar com ' + nomeVendedor : 'Comprar via WhatsApp'}</span>`;
+                ctaBtn.href = `https://api.whatsapp.com/send?phone=${numWhats}&text=${msg}`;
+            }
+
+            // Pills de especificações
+            const pills = [
+                { label: 'E-mail',     value: acc.email_status,  color: 'text-emerald-400' },
+                { label: 'Vínculos',    value: acc.links_status,   color: 'text-emerald-400' },
+                { label: 'Promo Code',  value: acc.promo_code,     color: 'text-emerald-400' },
+                { label: 'Nível',       value: acc.level,          color: 'text-brand-gold'  },
+            ];
+            if (acc.vendedor && acc.tipo === 'parceiro') {
+                pills.push({ label: 'Vendedor', value: acc.vendedor, color: 'text-orange-400' });
+            }
+
+            const pillsArea = document.getElementById('modalStatusPillsArea');
+            pillsArea.innerHTML = pills
+                .filter(p => p.value)
+                .map(p => `
+                    <div class="bg-white/5 border border-neutral-800/60 p-2.5 rounded-lg">
+                        <p class="text-[8px] text-gray-500 uppercase tracking-widest font-bold">${p.label}</p>
+                        <p class="${p.color} text-xs font-bold mt-1">${p.value}</p>
+                    </div>`)
+                .join('');
+
+            // Seções de campeões e recursos
+            const detailsArea = document.getElementById('modalDetailsSections');
+            const heroSections = [
+                { title: 'Heróis Míticos',        icon: 'fa-star',  color: 'text-red-500',  data: acc.miticos },
+                { title: 'Lendários Principais',   icon: 'fa-gem',   color: 'text-orange-500', data: acc.principais_lendarios },
+                { title: 'Lendários Destaque',     icon: 'fa-crown', color: 'text-yellow-500', data: acc.outros_lendarios },
+            ];
+            detailsArea.innerHTML = heroSections
+                .filter(s => s.data.length > 0)
+                .map(s => `
+                    <div class="space-y-2 border-t border-neutral-800 pt-4">
+                        <h4 class="text-[10px] font-bold uppercase tracking-widest ${s.color} flex items-center space-x-1.5">
+                            <i class="fas ${s.icon}"></i><span>${s.title}</span>
+                        </h4>
+                        <ul class="space-y-1.5 pl-1">
+                            ${s.data.map(item => `
+                                <li class="flex items-start space-x-2 text-xs text-gray-300">
+                                    <span class="text-brand-orange select-none">•</span>
+                                    <span class="leading-relaxed">${item}</span>
+                                </li>`).join('')}
+                        </ul>
+                    </div>`)
+                .join('');
+
+            if (acc.recursos) {
+                detailsArea.innerHTML += `
+                    <div class="space-y-2 border-t border-neutral-800 pt-4">
+                        <h4 class="text-[10px] font-bold uppercase tracking-widest text-sky-400 flex items-center space-x-1.5">
+                            <i class="fas fa-boxes-stacked"></i><span>Recursos & Itens</span>
+                        </h4>
+                        <p class="text-xs text-gray-300 leading-relaxed whitespace-pre-line">${acc.recursos}</p>
+                    </div>`;
+            }
+
+            // Grade de prints
+            const grid = document.getElementById('modalGalleryGrid');
+            grid.innerHTML = '';
+
+            if (images.length > 0) {
+                images.forEach((imgUrl, idx) => {
+                    const thumb = document.createElement('div');
+                    thumb.className = 'thumb relative bg-[#111] rounded-xl overflow-hidden border border-neutral-900 group aspect-[16/10] cursor-pointer transition-all duration-200 hover:border-brand-orange hover:scale-105';
+                    thumb.innerHTML = `
+                        <img src="${imgUrl}" loading="lazy" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-expand text-white text-lg"></i>
+                        </div>
+                        <span class="absolute bottom-2 right-2 bg-black/75 text-[9px] font-mono font-bold text-gray-400 px-2 py-0.5 rounded">
+                            ${idx + 1} / ${images.length}
+                        </span>`;
+                    thumb.addEventListener('click', () => openLightbox(idx));
+                    grid.appendChild(thumb);
+                });
+            } else {
+                grid.innerHTML = `<p class="col-span-full text-center text-gray-500 text-sm py-12">Nenhum print adicional foi adicionado para esta conta.</p>`;
+            }
+
+            // Exibe o modal
+            const modal = document.getElementById('detailsModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+
+            // Atualiza a URL sem recarregar a página (Deep-linking)
+            history.pushState(null, '', `?id=${acc.id}`);
+        }
+
+        // Fechar Modal de Detalhes
+        function closeDetailsModal() {
+            const modal = document.getElementById('detailsModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+            currentModalAccount = null;
+
+            // Restaura URL original (remove o id da query)
+            history.pushState(null, '', window.location.pathname);
+            closeLightbox();
+        }
+
+        document.getElementById('modalClose').addEventListener('click', closeDetailsModal);
+        
+        // Fecha se clicar fora do container do modal
+        document.getElementById('detailsModal').addEventListener('click', e => {
+            if (e.target === document.getElementById('detailsModal')) closeDetailsModal();
+        });
+
+        // ── LIGHTBOX LOGIC ─────────────────────────────────────────────
+        const lb    = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lbImg');
+        const lbWrap  = document.getElementById('lbWrap');
+        const lbCount = document.getElementById('lbCounter');
+
+        function openLightbox(i) {
+            currentImageIndex = i;
+            resetZoom();
+            updateLightbox();
+            lb.classList.remove('hidden');
+            lb.classList.add('flex');
+        }
+        function closeLightbox() {
+            lb.classList.add('hidden');
+            lb.classList.remove('flex');
+            resetZoom();
+        }
+        function updateLightbox() {
+            lbImg.src = images[currentImageIndex];
+            lbCount.textContent = `${currentImageIndex + 1} / ${images.length}`;
+        }
+        function prevImage() { currentImageIndex = (currentImageIndex - 1 + images.length) % images.length; resetZoom(); updateLightbox(); }
+        function nextImage() { currentImageIndex = (currentImageIndex + 1) % images.length; resetZoom(); updateLightbox(); }
+
+        function resetZoom() { scale = 1; translateX = 0; translateY = 0; applyTransform(); }
+        function applyTransform() { lbImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`; }
+
+        lbWrap.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            let newScale = scale + (Math.sign(e.deltaY) * -0.15 * scale);
+            scale = Math.min(5, Math.max(1, newScale));
+            if (scale === 1) { translateX = 0; translateY = 0; }
+            applyTransform();
+        }, { passive: false });
+
+        lbWrap.addEventListener('pointerdown', (e) => {
+            if (scale > 1) { isDragging = true; lbWrap.classList.add('no-transition'); startX = e.clientX - translateX; startY = e.clientY - translateY; }
+        });
+        window.addEventListener('pointermove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            translateX = e.clientX - startX;
+            translateY = e.clientY - startY;
+            applyTransform();
+        });
+        window.addEventListener('pointerup', () => { isDragging = false; lbWrap.classList.remove('no-transition'); });
+
+        lbWrap.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) { e.preventDefault(); isDragging = false; initialDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); initialScale = scale; }
+        }, { passive: false });
+        lbWrap.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+                scale = Math.min(5, Math.max(1, initialScale * (d / initialDistance)));
+                if (scale === 1) { translateX = 0; translateY = 0; }
+                applyTransform();
+            }
+        }, { passive: false });
+
+        // Eventos do Lightbox
+        document.getElementById('lbClose').addEventListener('click', closeLightbox);
+        document.getElementById('lbPrev').addEventListener('click', prevImage);
+        document.getElementById('lbNext').addEventListener('click', nextImage);
+        document.getElementById('lbPrev2').addEventListener('click', prevImage);
+        document.getElementById('lbNext2').addEventListener('click', nextImage);
+        lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+        document.addEventListener('keydown', e => {
+            if (lb.classList.contains('hidden')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') prevImage();
+            if (e.key === 'ArrowRight') nextImage();
+        });
+
+        let touchStartX = 0;
+        lb.addEventListener('touchstart', e => { if (e.touches.length === 1) touchStartX = e.changedTouches[0].clientX; });
+        lb.addEventListener('touchend', e => {
+            if (scale > 1 || e.changedTouches.length !== 1) return;
+            const diff = touchStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) diff > 0 ? nextImage() : prevImage();
+        });
+
         window.onload = fetchSheetData;
     </script>
+
+    <!-- MODAL DE DETALHES DA CONTA -->
+    <div id="detailsModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-start justify-center overflow-y-auto py-8 px-4">
+        <!-- Container do Modal -->
+        <div class="relative bg-brand-dark border border-neutral-800 w-full max-w-6xl rounded-3xl overflow-hidden shadow-2xl my-auto flex flex-col">
+            <!-- Botão de Fechar Modal -->
+            <button id="modalClose" class="absolute top-5 right-5 w-11 h-11 rounded-full bg-white/5 border border-white/10 text-white flex items-center justify-center hover:bg-brand-orange hover:border-brand-orange/50 transition-colors z-30">
+                <i class="fas fa-times text-lg"></i>
+            </button>
+
+            <!-- Cabeçalho do Modal -->
+            <div class="bg-gradient-to-br from-neutral-950 to-amber-950/20 p-6 sm:p-8 border-b border-neutral-800">
+                <div class="flex items-center space-x-2.5 mb-3">
+                    <span class="bg-brand-orange/15 border border-brand-orange/30 text-brand-gold text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">
+                        <i class="fas fa-id-card mr-1"></i> Ficha Técnica
+                    </span>
+                    <span id="modalCodeHeader" class="text-gray-500 text-xs font-mono">Cód: 000</span>
+                </div>
+                <h2 id="modalTitle" class="font-cinzel font-black text-xl sm:text-2xl lg:text-3xl text-white">CONTA DO...</h2>
+            </div>
+
+            <!-- Corpo do Modal -->
+            <div class="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                <!-- Coluna da Esquerda (Galeria de Prints) -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-[#0e0e11] border border-neutral-800/80 p-5 sm:p-6 rounded-2xl">
+                        <div class="flex items-center space-x-2 mb-4">
+                            <i class="fas fa-images text-brand-orange"></i>
+                            <h4 class="font-cinzel text-brand-gold font-bold text-xs tracking-wider">GALERIA DE PRINTS</h4>
+                        </div>
+                        <div id="modalGalleryGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            <!-- Inserido dinamicamente via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna da Direita (Detalhes e Ficha Técnica) -->
+                <div class="space-y-6">
+                    <div class="bg-brand-card border border-neutral-800/80 p-5 rounded-2xl space-y-6 shadow-xl">
+                        <!-- Especificações Rápidas (Pills) -->
+                        <div id="modalStatusPillsArea" class="grid grid-cols-2 gap-2 text-center">
+                            <!-- Inserido dinamicamente via JS -->
+                        </div>
+
+                        <!-- Seções de Campeões (Míticos, Lendários, Recursos) -->
+                        <div id="modalDetailsSections" class="space-y-6">
+                            <!-- Inserido dinamicamente via JS -->
+                        </div>
+
+                        <!-- Área de Preço e Compra -->
+                        <div class="bg-brand-orange/5 border border-brand-orange/25 p-4 rounded-xl flex items-center justify-between">
+                            <div>
+                                <p class="text-[9px] text-gray-500 uppercase tracking-widest font-bold">Investimento</p>
+                                <p id="modalPriceLabel" class="text-2xl font-black text-white font-cinzel mt-1">R$ 0</p>
+                            </div>
+                            <span id="modalAvailabilityBadge" class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded">DISPONÍVEL</span>
+                        </div>
+
+                        <!-- Botão de Compra -->
+                        <a id="modalBuyCtaBtn" href="#" target="_blank"
+                            class="w-full inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-4 px-4 rounded-xl transition-all shadow-md active:scale-95 duration-200">
+                            <i class="fab fa-whatsapp text-lg"></i>
+                            <span>Comprar via WhatsApp</span>
+                        </a>
+
+                        <p class="text-[10px] text-gray-500 text-center leading-relaxed">
+                            Conta autenticada e gerida de forma segura.<br>Entrega rápida e acompanhamento total do processo de vinculação.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX DO MODAL -->
+    <div id="lightbox" class="fixed inset-0 bg-black/95 z-[60] hidden items-center justify-center p-4 backdrop-blur-md">
+        <button id="lbClose" class="fixed top-5 right-5 w-11 h-11 rounded-full bg-white/10 border border-white/20 text-white flex items-center justify-center hover:bg-white/20 transition-colors z-[70]">
+            <i class="fas fa-times text-lg"></i>
+        </button>
+        <button id="lbPrev" class="fixed left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/5 border border-white/10 hover:border-brand-orange hover:bg-brand-orange/20 text-white flex items-center justify-center z-40 transition-colors">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button id="lbNext" class="fixed right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/5 border border-white/10 hover:border-brand-orange hover:bg-brand-orange/20 text-white flex items-center justify-center z-40 transition-colors">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        <div class="max-w-5xl w-full flex flex-col items-center space-y-4">
+            <div id="lbWrap" class="relative w-full rounded-2xl overflow-hidden border border-neutral-800 bg-black max-h-[75vh] flex items-center justify-center touch-action-none">
+                <img id="lbImg" src="" alt="Print em tamanho grande" class="max-h-[75vh] w-full object-contain cursor-grab active:cursor-grabbing">
+            </div>
+            <div class="flex items-center space-x-6 z-10">
+                <button id="lbPrev2" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 hover:bg-white/15 text-white flex items-center justify-center"><i class="fas fa-chevron-left"></i></button>
+                <span id="lbCounter" class="text-xs font-mono text-gray-400">1 / 1</span>
+                <button id="lbNext2" class="w-10 h-10 rounded-full bg-white/5 border border-white/10 hover:bg-white/15 text-white flex items-center justify-center"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

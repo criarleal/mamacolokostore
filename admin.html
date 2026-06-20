@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,12 +17,9 @@
     </script>
     <style>
         /* Bloqueia a visualização do painel até que a senha seja validada */
-        #protectedContent {
-            display: none;
-        }
+        #protectedContent { display: none; }
     </style>
 </head>
-
 <body class="bg-brand-dark text-gray-100 min-h-screen flex flex-col justify-between font-sans">
 
     <!-- Conteúdo Protegido -->
@@ -34,227 +30,148 @@
                     <a href="/mamakoshop"><img src="logo.png" class="w-full h-full object-cover"></a>
                 </div>
                 <div>
-                    <a href="/mamakoshop">
-                        <h1 class="text-xl font-bold text-white">Gerenciador do Catálogo <span
-                                class="text-brand-orange text-sm">V2</span></h1>
-                        <p class="text-xs text-gray-400">Gerenciamento completo</p>
-                    </a>
+                    <a href="/mamakoshop"><h1 class="text-xl font-bold text-white">Gerenciador do Catálogo <span class="text-brand-orange text-sm">V2</span></h1>
+                    <p class="text-xs text-gray-400">Gerenciamento completo</p></a>
                 </div>
             </div>
-            <span
-                class="bg-neutral-900 border border-neutral-800 text-brand-gold text-xs px-3 py-1 rounded-full font-mono">Modo
-                Live</span>
+            <span class="bg-neutral-900 border border-neutral-800 text-brand-gold text-xs px-3 py-1 rounded-full font-mono">Modo Live</span>
         </div>
 
         <div class="bg-brand-card border border-neutral-800 rounded-2xl p-6 md:p-8 shadow-xl">
             <form id="adminForm" class="space-y-8">
-
+                
                 <div class="bg-black/40 p-4 rounded-xl border border-neutral-900 grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Ação do
-                            Sistema</label>
-                        <select id="formAction"
-                            class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-medium">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Ação do Sistema</label>
+                        <select id="formAction" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-medium">
                             <option value="CREATE">Cadastrar Nova Conta</option>
                             <option value="UPDATE">Atualizar Conta Existente</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Código da
-                            Conta (ID)</label>
-                        <input type="text" id="accId" placeholder="Ex: 001" required
-                            class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-mono">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Código da Conta (ID)</label>
+                        <input type="text" id="accId" placeholder="Ex: 001" required class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-mono">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Etiqueta
-                            Exibida (Label)</label>
-                        <input type="text" id="accLabel" placeholder="Ex: Cód: 001"
-                            class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Etiqueta de Promoção?</label>
+                        <select id="accLabel" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
+                            <option value="">Não</option>
+                            <option value="Promoção">Sim</option>
+                        </select>
                     </div>
                 </div>
 
                 <!-- SEÇÃO ADICIONADA: Vendedor e Atendimento -->
                 <div class="space-y-4 bg-brand-orange/5 p-4 rounded-xl border border-brand-orange/20">
-                    <h3
-                        class="text-sm font-bold text-brand-orange uppercase tracking-wider border-l-2 border-brand-gold pl-2">
-                        Atribuição e Contato</h3>
+                    <h3 class="text-sm font-bold text-brand-orange uppercase tracking-wider border-l-2 border-brand-gold pl-2">Atribuição e Contato</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            <label
-                                class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Vendedor
-                                responsável</label>
-                            <input type="text" id="accVendedor" placeholder="Ex: Gabriel Leal"
-                                class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Vendedor responsável</label>
+                            <input type="text" id="accVendedor" placeholder="Ex: Gabriel Leal" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
                         </div>
                         <div>
-                            <label
-                                class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">WhatsApp
-                                do Vendedor</label>
-                            <input type="text" id="accWhatsapp" placeholder="Ex: 41999999999"
-                                class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-mono">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">WhatsApp do Vendedor</label>
+                            <input type="text" id="accWhatsapp" placeholder="Ex: 41999999999" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-mono">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Tipo
-                                de Conta</label>
-                            <input type="text" id="accTipo" placeholder="Ex: Parceiro (em branco para deixar padrão)"
-                                class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Tipo de Conta</label>
+                            <input type="text" id="accTipo" placeholder="Ex: Parceiro (em branco para deixar padrão)" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
                         </div>
                     </div>
                 </div>
 
                 <div class="space-y-4">
-                    <h3
-                        class="text-sm font-bold text-brand-gold uppercase tracking-wider border-l-2 border-brand-orange pl-2">
-                        Informações Gerais</h3>
+                    <h3 class="text-sm font-bold text-brand-gold uppercase tracking-wider border-l-2 border-brand-orange pl-2">Informações Gerais</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="md:col-span-2">
-                            <label
-                                class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Título
-                                da Conta</label>
-                            <input type="text" id="accTitle" placeholder="Ex: Conta Void Premium" required
-                                class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Título da Conta</label>
+                            <input type="text" id="accTitle" placeholder="Ex: Conta Void Premium" required class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Poder
-                                de Conta</label>
-                            <input type="text" id="accPower" placeholder="Ex: 7.12M" required
-                                class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Poder de Conta</label>
+                            <input type="text" id="accPower" placeholder="Ex: 7.12M" required class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
                         </div>
                         <div class="md:col-span-3">
-                            <label
-                                class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Descrição
-                                Curta (Tagline)</label>
-                            <input type="text" id="accTagline" placeholder="Resumo rápido para os cards da vitrine..."
-                                class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Descrição Curta (Tagline)</label>
+                            <input type="text" id="accTagline" placeholder="Resumo rápido para os cards da vitrine..." class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
                         </div>
                     </div>
                 </div>
 
                 <div class="space-y-4">
-                    <h3
-                        class="text-sm font-bold text-brand-gold uppercase tracking-wider border-l-2 border-brand-orange pl-2">
-                        Campeões em Destaque</h3>
+                    <h3 class="text-sm font-bold text-brand-gold uppercase tracking-wider border-l-2 border-brand-orange pl-2">Campeões em Destaque</h3>
                     <div class="grid grid-cols-1 gap-4">
                         <div>
-                            <label
-                                class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Míticos
-                                (Separados por vírgula)</label>
-                            <textarea id="accMiticos" rows="2" placeholder="Ex: Embrys, Mikage"
-                                class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white resize-none"></textarea>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Míticos (Separados por vírgula)</label>
+                            <textarea id="accMiticos" rows="2" placeholder="Ex: Embrys, Mikage" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white resize-none"></textarea>
                         </div>
                         <div>
-                            <label
-                                class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Principais
-                                Lendários (Separados por vírgula)</label>
-                            <textarea id="accPrLendarios" rows="2"
-                                placeholder="Ex: Yumeko, Arbitra Bless 6★, Graazur, Leonardo"
-                                class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white resize-none"></textarea>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Principais Lendários (Separados por vírgula)</label>
+                            <textarea id="accPrLendarios" rows="2" placeholder="Ex: Yumeko, Arbitra Bless 6★, Graazur, Leonardo" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white resize-none"></textarea>
                         </div>
                         <div>
-                            <label
-                                class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Outros
-                                Lendários</label>
-                            <textarea id="accOutrosLendarios" rows="3"
-                                placeholder="Ex: Gnut, Hilvi, Gurptuk, Rotos, Lilitu..."
-                                class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white resize-none"></textarea>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Outros Lendários</label>
+                            <textarea id="accOutrosLendarios" rows="3" placeholder="Ex: Gnut, Hilvi, Gurptuk, Rotos, Lilitu..." class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white resize-none"></textarea>
                         </div>
                     </div>
                 </div>
 
                 <div class="space-y-4 bg-black/20 p-4 rounded-xl border border-neutral-900">
-                    <h3
-                        class="text-sm font-bold text-brand-orange uppercase tracking-wider border-l-2 border-brand-gold pl-2">
-                        Recursos Importantes</h3>
+                    <h3 class="text-sm font-bold text-brand-orange uppercase tracking-wider border-l-2 border-brand-gold pl-2">Recursos Importantes</h3>
                     <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Bens,
-                            Itens e Informações Adicionais</label>
-                        <textarea id="accRecursos" rows="4"
-                            placeholder="Descreva aqui os detalhes técnicos de recursos da conta (Ex: Livros de Habilidade, Gemas, Energia estocada, Moedas da Arena, etc...)"
-                            class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-sans resize-y"></textarea>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Bens, Itens e Informações Adicionais</label>
+                        <textarea id="accRecursos" rows="4" placeholder="Descreva aqui os detalhes técnicos de recursos da conta (Ex: Livros de Habilidade, Gemas, Energia estocada, Moedas da Arena, etc...)" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-sans resize-y"></textarea>
                     </div>
                 </div>
 
                 <div class="space-y-4">
-                    <h3
-                        class="text-sm font-bold text-brand-gold uppercase tracking-wider border-l-2 border-brand-orange pl-2">
-                        Especificações e Status</h3>
+                    <h3 class="text-sm font-bold text-brand-gold uppercase tracking-wider border-l-2 border-brand-orange pl-2">Especificações e Status</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                         <div>
-                            <label
-                                class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Status
-                                da Conta</label>
-                            <select id="accStatus"
-                                class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-medium">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Status da Conta</label>
+                            <select id="accStatus" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-medium">
                                 <option value="DISPONÍVEL">DISPONÍVEL</option>
                                 <option value="VENDIDO">VENDIDO</option>
                             </select>
                         </div>
                         <div>
-                            <label
-                                class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Status
-                                do E-mail</label>
-                            <input type="text" id="accEmailStatus" placeholder="Ex: ✓ Alterável"
-                                class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Status do E-mail</label>
+                            <input type="text" id="accEmailStatus" placeholder="Ex: ✓ Alterável" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
                         </div>
                         <div>
-                            <label
-                                class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Status
-                                de Vínculos</label>
-                            <input type="text" id="accLinksStatus" placeholder="Ex: ✓ Sem vínculos"
-                                class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Status de Vínculos</label>
+                            <input type="text" id="accLinksStatus" placeholder="Ex: ✓ Sem vínculos" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Tipo
-                                / Promo Code</label>
-                            <input type="text" id="accPromoCode" placeholder="Ex: ✓ Aceita"
-                                class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Tipo / Promo Code</label>
+                            <input type="text" id="accPromoCode" placeholder="Ex: ✓ Aceita" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Level
-                                da Conta</label>
-                            <input type="text" id="accLevel" placeholder="Ex: Mid/End Game"
-                                class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Level da Conta</label>
+                            <input type="text" id="accLevel" placeholder="Ex: Mid/End Game" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Preço
-                                (BRL)</label>
-                            <input type="number" id="priceBrl" placeholder="1000"
-                                class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-mono">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Preço (BRL)</label>
+                            <input type="number" id="priceBrl" placeholder="1000" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-mono">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Preço
-                                (USD)</label>
-                            <input type="number" id="priceUsd" placeholder="200"
-                                class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-mono">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Preço (USD)</label>
+                            <input type="number" id="priceUsd" placeholder="200" class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white font-mono">
                         </div>
                         <div>
-                            <label
-                                class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Galeria
-                                de Prints (Até 20)</label>
-                            <input type="file" id="imageFiles" accept="image/*" multiple
-                                class="w-full text-xs text-gray-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-neutral-900 file:text-brand-gold hover:file:bg-neutral-800 cursor-pointer pt-1">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Selo
-                                de Destaque</label>
-                            <select id="accDestaque"
-                                class="w-full bg-black border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:border-brand-orange outline-none text-white">
-                                <option value="">Nenhum</option>
-                                <option value="PROMO">PROMOÇÃO</option>
-                            </select>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Galeria de Prints (Até 20)</label>
+                            <input type="file" id="imageFiles" accept="image/*" multiple class="w-full text-xs text-gray-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-neutral-900 file:text-brand-gold hover:file:bg-neutral-800 cursor-pointer pt-1">
                         </div>
                     </div>
                 </div>
 
-                <button type="submit" id="btnSubmit"
-                    class="w-full bg-gradient-to-r from-brand-orange to-red-600 text-white font-bold py-4 rounded-xl hover:scale-[1.01] active:scale-95 transition-all shadow-lg shadow-brand-orange/10 flex items-center justify-center space-x-2">
+                <button type="submit" id="btnSubmit" class="w-full bg-gradient-to-r from-brand-orange to-red-600 text-white font-bold py-4 rounded-xl hover:scale-[1.01] active:scale-95 transition-all shadow-lg shadow-brand-orange/10 flex items-center justify-center space-x-2">
                     <i class="fas fa-cloud-upload-alt"></i>
                     <span id="btnText">Enviar para o Google Sheets</span>
                 </button>
             </form>
 
-            <div id="statusBox" class="hidden mt-6 p-4 rounded-xl text-sm font-medium flex items-center space-x-2">
-            </div>
+            <div id="statusBox" class="hidden mt-6 p-4 rounded-xl text-sm font-medium flex items-center space-x-2"></div>
         </div>
     </div>
 
@@ -281,7 +198,7 @@
         })();
 
         // ── CONFIGURAÇÕES DOS ENDPOINTS ──────────────────────────────
-        const IMGBB_API_KEY = "25454de698b208b18802361e068be106";
+        const IMGBB_API_KEY = "25454de698b208b18802361e068be106"; 
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbywI1pkvR1RLxXiYFVKnfpDjjIcdVP6WCJLT7P_DkX94pnPKvX-IF2cGUzU9LXUDw/exec";
 
         const form = document.getElementById('adminForm');
@@ -291,26 +208,17 @@
         const accIdInput = document.getElementById('accId');
         const accLabelInput = document.getElementById('accLabel');
 
-        // Autocompletar a Etiqueta (Label) dinamicamente quando digitar o ID
-        accIdInput.addEventListener('input', function () {
-            if (this.value.trim() !== "") {
-                accLabelInput.value = "Cód: " + this.value.trim();
-            } else {
-                accLabelInput.value = "";
-            }
-        });
-
         // Alternar campos obrigatórios dependendo da ação selecionada
-        document.getElementById('formAction').addEventListener('change', function () {
+        document.getElementById('formAction').addEventListener('change', function() {
             const isUpdate = this.value === 'UPDATE';
             document.getElementById('accTitle').required = !isUpdate;
             document.getElementById('accPower').required = !isUpdate;
             btnText.innerText = isUpdate ? "Atualizar Conta no Google Sheets" : "Enviar para o Google Sheets";
         });
 
-        form.addEventListener('submit', async function (e) {
+        form.addEventListener('submit', async function(e) {
             e.preventDefault();
-
+            
             btnSubmit.disabled = true;
             statusBox.className = "mt-6 p-4 rounded-xl text-sm font-medium flex items-center space-x-2 bg-neutral-900 text-brand-gold";
             statusBox.innerHTML = `<i class="fas fa-spinner animate-spin"></i> <span>Iniciando processamento...</span>`;
@@ -323,10 +231,10 @@
             // 1. Processar upload das múltiplas imagens (se existirem)
             if (fileInput.files.length > 0) {
                 const totalFiles = Math.min(fileInput.files.length, 20);
-
-                for (let i = 0; i < totalFiles; i++) {
-                    statusBox.innerHTML = `<i class="fas fa-image animate-pulse"></i> <span>Hospedando imagem ${i + 1} de ${totalFiles} no ImgBB...</span>`;
-
+                
+                for(let i = 0; i < totalFiles; i++) {
+                    statusBox.innerHTML = `<i class="fas fa-image animate-pulse"></i> <span>Hospedando imagem ${i+1} de ${totalFiles} no ImgBB...</span>`;
+                    
                     const formDataImage = new FormData();
                     formDataImage.append("image", fileInput.files[i]);
 
@@ -336,7 +244,7 @@
                             body: formDataImage
                         });
                         const imgbbData = await imgbbResponse.json();
-
+                        
                         if (imgbbData.success) {
                             uploadedUrls.push(imgbbData.data.url);
                         } else {
@@ -354,7 +262,7 @@
             let printsString = uploadedUrls.length > 0 ? uploadedUrls.join(", ") : "";
 
             statusBox.innerHTML = `<i class="fas fa-database animate-pulse"></i> <span>Sincronizando todas as colunas com o Sheets...</span>`;
-
+            
             // Montagem atualizada do Payload incluindo novos campos
             const payload = {
                 action: action,
@@ -365,7 +273,7 @@
                 title: document.getElementById('accTitle').value.trim(),
                 power: document.getElementById('accPower').value.trim(),
                 tagline: document.getElementById('accTagline').value.trim(),
-                image: mainImage,
+                image: mainImage, 
                 priceBrl: document.getElementById('priceBrl').value,
                 priceUsd: document.getElementById('priceUsd').value,
                 label: accLabelInput.value.trim(),
@@ -378,8 +286,7 @@
                 links_status: document.getElementById('accLinksStatus').value.trim(),
                 promo_code: document.getElementById('accPromoCode').value.trim(),
                 level: document.getElementById('accLevel').value.trim(),
-                recursos: document.getElementById('accRecursos').value.trim(),
-                destaque: document.getElementById('accDestaque').value.trim()
+                recursos: document.getElementById('accRecursos').value.trim()
             };
 
             try {
@@ -408,5 +315,4 @@
         }
     </script>
 </body>
-
 </html>
